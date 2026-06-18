@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abbott — AI Operational Intelligence Dossier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #08090c;
+      --bg2:        #0f1117;
+      --bg3:        #161923;
+      --bg4:        #1c2030;
+      --border:     #252a3a;
+      --accent:     #ff3e3e;
+      --accent-dim: rgba(255,62,62,0.10);
+      --accent-glow:rgba(255,62,62,0.20);
+      --blue:       #3b82f6;
+      --blue-dim:   rgba(59,130,246,0.10);
+      --amber:      #f59e0b;
+      --amber-dim:  rgba(245,158,11,0.10);
+      --green:      #10b981;
+      --green-dim:  rgba(16,185,129,0.10);
+      --text:       #e8eaf0;
+      --text-muted: #6b7394;
+      --text-dim:   #9ba3c2;
+      --radius:     10px;
+      --radius-lg:  16px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ::selection { background: var(--accent); color: #fff; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ─── CLASSIFICATION BANNER ─── */
+    .class-banner {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--accent);
+      color: #fff;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      padding: 6px 0;
+    }
+    .class-banner-bottom {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+      background: var(--accent);
+      color: #fff;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      padding: 6px 0;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 30%, rgba(255,62,62,0.06) 0%, transparent 70%);
+    }
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .hero-company {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .hero-title {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+    }
+    .hero-title span { color: var(--accent); }
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin-bottom: 40px;
+    }
+    .hero-meta {
+      display: flex; gap: 24px; flex-wrap: wrap; justify-content: center;
+      font-size: 13px; color: var(--text-muted);
+    }
+    .hero-meta-item { display: flex; align-items: center; gap: 8px; }
+    .dot { color: var(--accent); font-size: 14px; }
+
+    /* ─── PAGE CONTAINER ─── */
+    .page { max-width: 860px; margin: 0 auto; padding: 0 24px 120px; }
+
+    /* ─── SECTION ─── */
+    .section { margin-top: 80px; }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .section p { color: var(--text-dim); margin-bottom: 16px; }
+    .section p strong { color: var(--text); }
+
+    /* ─── STAT GRID ─── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin: 32px 0;
+    }
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .stat-number.accent { color: var(--accent); }
+    .stat-number.blue { color: var(--blue); }
+    .stat-number.amber { color: var(--amber); }
+    .stat-number.green { color: var(--green); }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ─── THREAT CARD ─── */
+    .threat-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin: 20px 0;
+    }
+    .threat-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .threat-card p { color: var(--text-dim); font-size: 15px; margin: 0; }
+
+    /* ─── OPPORTUNITY CARD ─── */
+    .opp-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--blue);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin: 20px 0;
+    }
+    .opp-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--blue);
+    }
+    .opp-card p { color: var(--text-dim); font-size: 15px; margin: 0; }
+    .opp-card ul { color: var(--text-dim); font-size: 15px; margin: 10px 0 0 20px; }
+    .opp-card li { margin-bottom: 6px; }
+
+    /* ─── TIMELINE ─── */
+    .timeline { margin: 32px 0; position: relative; padding-left: 32px; }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 8px; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--accent), var(--blue), var(--green));
+    }
+    .tl-item { position: relative; margin-bottom: 32px; }
+    .tl-item::before {
+      content: '';
+      position: absolute; left: -28px; top: 6px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--accent);
+    }
+    .tl-item:nth-child(2)::before { border-color: var(--blue); }
+    .tl-item:nth-child(3)::before { border-color: var(--blue); }
+    .tl-item:nth-child(4)::before { border-color: var(--green); }
+    .tl-phase {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .tl-item:nth-child(2) .tl-phase,
+    .tl-item:nth-child(3) .tl-phase { color: var(--blue); }
+    .tl-item:nth-child(4) .tl-phase { color: var(--green); }
+    .tl-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .tl-body { color: var(--text-dim); font-size: 15px; }
+    .tl-body ul { margin: 8px 0 0 20px; }
+    .tl-body li { margin-bottom: 4px; }
+
+    /* ─── COMPETITOR TABLE ─── */
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 14px;
+    }
+    .comp-table th {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+    }
+    .comp-table td {
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      color: var(--text-dim);
+    }
+    .comp-table tr:hover td { background: var(--bg2); }
+    .status-active { color: var(--green); font-weight: 600; }
+    .status-building { color: var(--amber); font-weight: 600; }
+    .status-gap { color: var(--accent); font-weight: 600; }
+
+    /* ─── CALLOUT BOX ─── */
+    .callout {
+      background: linear-gradient(135deg, rgba(255,62,62,0.06), rgba(59,130,246,0.04));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin: 40px 0;
+      text-align: center;
+    }
+    .callout h3 {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .callout p { color: var(--text-dim); max-width: 600px; margin: 0 auto; }
+
+    /* ─── ROI BOX ─── */
+    .roi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin: 32px 0;
+    }
+    .roi-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .roi-card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .roi-card .roi-value {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--green);
+      margin-bottom: 4px;
+    }
+    .roi-card p { color: var(--text-muted); font-size: 13px; margin: 0; }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      text-align: center;
+      padding: 60px 24px 80px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .footer-logo {
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-meta { flex-direction: column; gap: 8px; }
+      .roi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="class-banner">Confidential — Pre-Market Intelligence — Do Not Distribute</div>
+<div class="class-banner-bottom">Confidential — Pre-Market Intelligence — Do Not Distribute</div>
+
+<!-- ── HERO ────────────────────────────────────────────── -->
+<section class="hero">
+  <p class="hero-eyebrow">Private Intelligence Dossier</p>
+  <p class="hero-company">Prepared for Abbott UK Leadership</p>
+  <h1 class="hero-title">The AI <span>Operations Gap</span></h1>
+  <p class="hero-sub">An independent analysis of where Abbott's competitors are deploying AI operational intelligence — and the window that's closing.</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><span class="dot">●</span> Classification: Confidential</div>
+    <div class="hero-meta-item"><span class="dot">●</span> June 2026</div>
+    <div class="hero-meta-item"><span class="dot">●</span> AI Momentum Labs</div>
+  </div>
+</section>
+
+<div class="page">
+
+<!-- ── SECTION 1: ABBOTT AT A GLANCE ──────────────────── -->
+<div class="section">
+  <p class="section-label">Section 01 — Subject Profile</p>
+  <h2 class="section-title">Abbott Laboratories — Current Position</h2>
+  <p>Abbott is a global leader in medical devices, diagnostics, nutrition, and pharmaceuticals. The numbers speak for themselves.</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-number">$44.3B</div>
+      <div class="stat-label">2025 Revenue</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number blue">115,000+</div>
+      <div class="stat-label">Employees</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number amber">160+</div>
+      <div class="stat-label">Countries</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number green">#105</div>
+      <div class="stat-label">Fortune 500</div>
+    </div>
+  </div>
+
+  <p><strong>UK Operations:</strong> Headquarters in Maidenhead (Berkshire). Major diabetes care manufacturing and innovation site in Witney (Oxfordshire). Toxicology operations in Abingdon. Additional presence in Sittingbourne (Kent). Engineering and support functions across the Oxfordshire corridor including Didcot.</p>
+
+  <p><strong>2026 Outlook:</strong> Guiding 6.5–7.5% organic sales growth and ~10% adjusted EPS growth. Pending Exact Sciences acquisition expected to close Q2 2026. Active restructuring across Diagnostics, Nutritionals, Established Pharmaceuticals, and Medical Devices to reduce costs and improve efficiency.</p>
+
+  <p><strong>Known Pressures:</strong></p>
+  <ul style="color: var(--text-dim); margin-left: 20px; margin-bottom: 16px;">
+    <li>Geopolitical logistics disruptions (Middle East conflicts, air freight competition)</li>
+    <li>Tariff exposure — estimated "few hundred million dollars" impact from U.S./China trade policy</li>
+    <li>UK laboratory staffing shortages — high overtime, contractor dependency</li>
+    <li>NHS cost-containment squeezing procurement margins</li>
+    <li>Nutrition segment under pressure — volume declines, WIC contract changes</li>
+    <li>Cybersecurity flagged as material risk to IT infrastructure</li>
+  </ul>
+</div>
+
+<!-- ── SECTION 2: THE COMPETITIVE LANDSCAPE ───────────── -->
+<div class="section">
+  <p class="section-label">Section 02 — Competitive Intelligence</p>
+  <h2 class="section-title">Your Competitors Are Already Moving</h2>
+  <p>The medtech AI arms race isn't coming. It's here. <strong>70% of healthcare and life sciences organisations are now actively using AI</strong> in operations — up from 63% last year. The question isn't whether to deploy. It's whether you're already behind.</p>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Competitor</th>
+        <th>AI Operational Status</th>
+        <th>Key Deployments</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Siemens Healthineers</strong></td>
+        <td><span class="status-active">● Active at Scale</span></td>
+        <td>80+ AI-powered offerings live. "Operational Twins" simulating entire hospital departments. Predictive maintenance (TubeGuard). 1,100+ ML patent families. AI factory with Sherlock supercomputer running 1,800+ daily experiments.</td>
+      </tr>
+      <tr>
+        <td><strong>Roche Diagnostics</strong></td>
+        <td><span class="status-active">● Active at Scale</span></td>
+        <td>75% AI adoption across customer service, clinical development, and commercial. Hybrid-cloud AI factory (thousands of NVIDIA Blackwell GPUs). PathAI acquisition pending. Digital Pathology platform with 20+ AI algorithms.</td>
+      </tr>
+      <tr>
+        <td><strong>GE HealthCare</strong></td>
+        <td><span class="status-building">● Building Rapidly</span></td>
+        <td>AI-enabled imaging and workflow intelligence. Expanding into operational analytics and predictive service.</td>
+      </tr>
+      <tr>
+        <td><strong>Philips</strong></td>
+        <td><span class="status-building">● Building Rapidly</span></td>
+        <td>AI-driven clinical informatics and enterprise workflow solutions. Patient monitoring intelligence.</td>
+      </tr>
+      <tr>
+        <td><strong>Abbott</strong></td>
+        <td><span class="status-gap">● Gap Identified</span></td>
+        <td>GLP systems Track (lab automation). Distributed manufacturing strategy. No publicly visible AI operational intelligence layer for internal UK operations, communications, or administrative workflows.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <h3>The window is 12–18 months.</h3>
+    <p>After that, AI operational intelligence becomes table stakes — not competitive advantage. The companies deploying now build compounding knowledge assets their competitors can never catch.</p>
+  </div>
+</div>
+
+<!-- ── SECTION 3: THE GAP ─────────────────────────────── -->
+<div class="section">
+  <p class="section-label">Section 03 — Vulnerability Analysis</p>
+  <h2 class="section-title">Where the Operational Gap Lives</h2>
+  <p>Abbott's product innovation is world-class. But innovation doesn't happen in a vacuum — it happens on top of operational infrastructure. And operational infrastructure is where AI creates the largest immediate ROI. These are the gaps visible from outside the building.</p>
+
+  <div class="threat-card">
+    <h4>🔴 Communications & Response Velocity</h4>
+    <p>Every hour a supplier query, internal engineering request, or cross-site coordination message sits unanswered costs money. In a 115,000-person organisation across 160+ countries, the volume of routine communications that consume senior engineering time is enormous. Your competitors are deploying AI systems that handle, route, and respond to operational communications autonomously — freeing their engineers to engineer.</p>
+  </div>
+
+  <div class="threat-card">
+    <h4>🔴 Institutional Knowledge Retention</h4>
+    <p>UK laboratory staffing shortages are an acknowledged industry problem. Every time a skilled engineer, technician, or operations specialist leaves — whether through restructuring or natural attrition — their accumulated knowledge of processes, equipment quirks, supplier relationships, and troubleshooting history walks out with them. This is not a training problem. It's a knowledge architecture problem.</p>
+  </div>
+
+  <div class="threat-card">
+    <h4>🔴 Cross-Site Intelligence Coordination</h4>
+    <p>With operations spanning Maidenhead, Witney, Abingdon, Sittingbourne, and Didcot — plus global manufacturing sites — the challenge of keeping every team operating with the same intelligence is real. Procurement decisions in one location don't automatically inform procurement in another. A supply chain disruption flagged in one corridor doesn't automatically trigger contingency planning across all UK sites.</p>
+  </div>
+
+  <div class="threat-card">
+    <h4>🔴 Administrative Overhead on Technical Staff</h4>
+    <p>Senior Support Engineers and Engineering Leaders shouldn't spend 30–40% of their week on emails, status reports, meeting prep, and documentation. But in most organisations this size, they do. That's not a people problem — it's a systems problem. And it's a problem AI solves immediately.</p>
+  </div>
+
+  <div class="threat-card">
+    <h4>🔴 Restructuring Intelligence</h4>
+    <p>Abbott has active restructuring programmes across multiple divisions in 2025–2026. Restructuring without real-time operational intelligence is flying blind. Which processes are redundant? Where are the bottlenecks that survive every reorg? What knowledge is at risk of being lost? An AI operational layer answers these questions with data, not guesswork.</p>
+  </div>
+</div>
+
+<!-- ── SECTION 4: THE SOLUTION ────────────────────────── -->
+<div class="section">
+  <p class="section-label">Section 04 — Deployment Model</p>
+  <h2 class="section-title">What AI Operational Intelligence Looks Like Inside Abbott</h2>
+  <p>This isn't a chatbot. This isn't another software platform to learn. This is a permanent AI operational workforce that lives inside the business — handling real work, building institutional memory, and getting measurably better every month.</p>
+
+  <div class="opp-card">
+    <h4>Communications & Workflow Automation</h4>
+    <p>AI handles incoming communications across email, messaging, and internal channels. It reads, understands context, drafts responses, routes urgent items to the right people, and follows up automatically. Engineers get their time back. Nothing falls through the cracks.</p>
+    <ul>
+      <li>Supplier queries answered in minutes, not days</li>
+      <li>Internal engineering requests triaged and routed automatically</li>
+      <li>Cross-site coordination messages handled with full context</li>
+      <li>Scheduled follow-ups and escalations that run without human intervention</li>
+    </ul>
+  </div>
+
+  <div class="opp-card">
+    <h4>Institutional Knowledge Architecture</h4>
+    <p>Every process, every troubleshooting sequence, every equipment specification, every supplier relationship — captured, indexed, and instantly searchable. When someone leaves, their knowledge stays. When someone new starts, the system brings them up to speed.</p>
+    <ul>
+      <li>Persistent memory across all interactions — nothing forgotten</li>
+      <li>Semantic search across months and years of accumulated intelligence</li>
+      <li>Equipment history, maintenance patterns, and failure mode documentation</li>
+      <li>Onboarding acceleration — new engineers productive in weeks, not months</li>
+    </ul>
+  </div>
+
+  <div class="opp-card">
+    <h4>Research & Competitive Intelligence</h4>
+    <p>Before every meeting, every procurement decision, every strategic review — the system delivers a prepared brief. Supplier background. Competitor activity. Regulatory changes. Market trends. Summarised, structured, and ready to act on.</p>
+    <ul>
+      <li>Automated supplier and vendor research briefs</li>
+      <li>Real-time monitoring of competitor announcements and regulatory updates</li>
+      <li>Industry publication and patent activity surveillance</li>
+      <li>90-minute conference presentations summarised in 2-minute reads</li>
+    </ul>
+  </div>
+
+  <div class="opp-card">
+    <h4>Operational Reporting & Analysis</h4>
+    <p>Daily briefings delivered before the first person opens their laptop. What's on track. What's at risk. What needs a decision today. Spreadsheet data turned into actionable insight. Complex scenarios modelled in minutes.</p>
+    <ul>
+      <li>Morning priority briefings — 5 bullets, read with your coffee</li>
+      <li>Project and task tracking with automated status updates</li>
+      <li>Data analysis on demand — trends, anomalies, forecasts</li>
+      <li>Meeting preparation briefs generated automatically</li>
+    </ul>
+  </div>
+
+  <div class="opp-card">
+    <h4>Content & Documentation Production</h4>
+    <p>Technical documentation, compliance reports, internal communications, training materials, presentations — produced in a fraction of the time, consistent in quality, always on-brand.</p>
+    <ul>
+      <li>Technical documentation drafted from specifications and notes</li>
+      <li>Compliance and audit documentation support</li>
+      <li>Internal newsletter and communication drafting</li>
+      <li>Presentation and briefing material production</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ── SECTION 5: TIMELINE ────────────────────────────── -->
+<div class="section">
+  <p class="section-label">Section 05 — Implementation Timeline</p>
+  <h2 class="section-title">From Decision to Operational in 30 Days</h2>
+  <p>This is not a 12-month integration project. This is not a committee decision that sits in procurement for two quarters. The system deploys in weeks and starts delivering value on day one.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <p class="tl-phase">Week 1–2 — Foundation</p>
+      <h4 class="tl-title">Discovery & Configuration</h4>
+      <div class="tl-body">
+        <ul>
+          <li>Deep-dive into current operations, workflows, and pain points</li>
+          <li>Map communication channels and information flows</li>
+          <li>Configure the AI system with Abbott-specific knowledge, terminology, and processes</li>
+          <li>Establish security protocols and access boundaries</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item">
+      <p class="tl-phase">Week 2–3 — Activation</p>
+      <h4 class="tl-title">Core Systems Live</h4>
+      <div class="tl-body">
+        <ul>
+          <li>Communications handling activated across primary channels</li>
+          <li>Daily briefing system operational</li>
+          <li>Research and intelligence capabilities live</li>
+          <li>Initial knowledge base seeded with critical operational data</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item">
+      <p class="tl-phase">Week 3–4 — Expansion</p>
+      <h4 class="tl-title">Full Operational Coverage</h4>
+      <div class="tl-body">
+        <ul>
+          <li>Automated workflows and follow-up sequences active</li>
+          <li>Cross-site intelligence coordination operational</li>
+          <li>Reporting and analysis capabilities deployed</li>
+          <li>Team trained and comfortable with the system</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item">
+      <p class="tl-phase">Month 2–6 — Compounding</p>
+      <h4 class="tl-title">The System Gets Smarter</h4>
+      <div class="tl-body">
+        <ul>
+          <li>Accumulated knowledge makes every interaction faster and more accurate</li>
+          <li>Patterns identified across months of operational data</li>
+          <li>Proactive recommendations based on historical trends</li>
+          <li>The system knows your equipment, your suppliers, your seasonal patterns, your team's preferences</li>
+        </ul>
+        <p style="margin-top: 12px;"><strong>At six months, it knows the operation. At twelve months, it knows it better than most of the team.</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SECTION 6: ROI ─────────────────────────────────── -->
+<div class="section">
+  <p class="section-label">Section 06 — Return on Investment</p>
+  <h2 class="section-title">The Numbers That Matter</h2>
+  <p>Industry data from Deloitte, NVIDIA, and medtech sector analysis consistently shows measurable returns from AI operational deployment.</p>
+
+  <div class="roi-grid">
+    <div class="roi-card">
+      <h4>Time Reclaimed</h4>
+      <div class="roi-value">15–25 hrs</div>
+      <p>Per senior staff member, per week. Reclaimed from admin, comms, reporting, and meeting prep.</p>
+    </div>
+    <div class="roi-card">
+      <h4>Response Velocity</h4>
+      <div class="roi-value">90%↓</div>
+      <p>Reduction in average response time to routine operational communications.</p>
+    </div>
+    <div class="roi-card">
+      <h4>Knowledge Retention</h4>
+      <div class="roi-value">100%</div>
+      <p>Institutional knowledge captured permanently. Zero loss from staff turnover.</p>
+    </div>
+    <div class="roi-card">
+      <h4>Operational Cost</h4>
+      <div class="roi-value">20–40%↓</div>
+      <p>Reduction in operational overhead. Industry average across UK SME and mid-market AI deployments.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <h3>Cost Comparison</h3>
+    <p style="margin-bottom: 16px;">Salesforce with AI capabilities: <strong>£150,000–£500,000 setup + £400+/user/month.</strong></p>
+    <p style="margin-bottom: 16px;">Enterprise AI platforms: <strong>£50,000–£200,000+ project cost.</strong></p>
+    <p style="margin-bottom: 16px;">A full AI operational workforce from AI Momentum Labs: <strong>A fraction of these figures.</strong></p>
+    <p>This is not enterprise software pricing. This is a managed service that delivers more capability at a fraction of the cost — because it's built to work, not to look good in a procurement presentation.</p>
+  </div>
+</div>
+
+<!-- ── SECTION 7: THE URGENCY ─────────────────────────── -->
+<div class="section">
+  <p class="section-label">Section 07 — Strategic Assessment</p>
+  <h2 class="section-title">The Window Is Closing</h2>
+
+  <p><strong>The companies that deploy AI operational intelligence in 2026 build an asset their competitors can never replicate.</strong> Because the system doesn't just automate tasks — it accumulates knowledge. Every month it runs, the gap between organisations that have it and those that don't grows wider.</p>
+
+  <p>Siemens Healthineers isn't investing in AI because it's trendy. They're investing because they've run the numbers on what happens to companies that don't. Roche isn't building an AI factory with thousands of GPUs for fun. They're building it because operational intelligence is the next competitive moat in medtech.</p>
+
+  <p>Abbott's product pipeline is strong. The science is world-class. The question is whether the operational infrastructure keeping that machine running is evolving at the same speed.</p>
+
+  <p><strong>This dossier exists because we believe it should be.</strong></p>
+
+  <p>AI Momentum Labs is going to market with a limited number of enterprise deployments in Q3 2026. This briefing was prepared as a private assessment for Abbott UK leadership — not as a sales document. The analysis stands on its own. If the conclusions resonate, we should talk.</p>
+
+  <div class="callout" style="margin-top: 40px;">
+    <h3>Next Step</h3>
+    <p>A 30-minute confidential briefing. No pitch. No slides. Just a direct conversation about what's possible, what's practical, and what the realistic timeline looks like for Abbott's UK operations.</p>
+    <p style="margin-top: 16px; color: var(--text); font-weight: 600;">Contact: AI Momentum Labs — aimomentumlabs.com</p>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  <p class="footer-logo">AI Momentum Labs</p>
+  <p>Confidential Intelligence Dossier — Prepared June 2026</p>
+  <p style="margin-top: 4px;">This document contains independent analysis and publicly available information. No proprietary Abbott data was accessed in its preparation.</p>
+</div>
+
+</body>
+</html>
