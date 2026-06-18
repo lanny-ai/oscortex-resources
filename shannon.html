@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Switch to America × OSCortex — Your Intelligent Operating System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0a;
+    --bg-card: #111111;
+    --bg-card-hover: #161616;
+    --bg-elevated: #1a1a1a;
+    --gold: #c9a84c;
+    --gold-dim: rgba(201, 168, 76, 0.15);
+    --gold-glow: rgba(201, 168, 76, 0.3);
+    --blue: #00c2ff;
+    --blue-dim: rgba(0, 194, 255, 0.12);
+    --blue-glow: rgba(0, 194, 255, 0.25);
+    --text: #e8e8e8;
+    --text-dim: #999999;
+    --text-muted: #666666;
+    --border: #222222;
+    --border-light: #2a2a2a;
+    --success: #34d399;
+    --warning: #fbbf24;
+  }
+
+  html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 64px;
+  }
+  .nav-brand {
+    font-weight: 700; font-size: 0.95rem; letter-spacing: -0.01em;
+    color: var(--gold);
+  }
+  .nav-brand span { color: var(--text-dim); font-weight: 400; }
+  .nav-links { display: flex; gap: 0.25rem; }
+  .nav-links a {
+    color: var(--text-dim); text-decoration: none; font-size: 0.8rem;
+    font-weight: 500; padding: 0.4rem 0.75rem; border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); background: var(--gold-dim); }
+  .nav-mobile-toggle {
+    display: none; background: none; border: none; color: var(--text);
+    font-size: 1.5rem; cursor: pointer; padding: 0.25rem;
+  }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 6rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding-top: 64px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,168,76,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 100%, rgba(0,194,255,0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 820px; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gold);
+    background: var(--gold-dim); padding: 0.5rem 1.25rem;
+    border-radius: 100px; border: 1px solid rgba(201,168,76,0.2);
+    margin-bottom: 2rem;
+  }
+  .hero-eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 8px var(--success);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 5.5vw, 4.2rem); font-weight: 800;
+    line-height: 1.1; letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 .gold { color: var(--gold); }
+  .hero .subtitle {
+    font-size: clamp(1.05rem, 2vw, 1.25rem); color: var(--text-dim);
+    line-height: 1.7; max-width: 640px; margin: 0 auto 2.5rem;
+    font-weight: 400;
+  }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 3rem;
+    flex-wrap: wrap; margin-top: 1rem;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .number {
+    font-size: 2rem; font-weight: 800; color: var(--blue);
+    letter-spacing: -0.02em;
+  }
+  .hero-stat .label {
+    font-size: 0.7rem; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-top: 0.25rem;
+  }
+  .hero-north-star {
+    margin-top: 3rem; padding: 1.25rem 2rem;
+    background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 12px; display: inline-block;
+  }
+  .hero-north-star .ns-label {
+    font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--gold); font-weight: 700; margin-bottom: 0.35rem;
+  }
+  .hero-north-star .ns-value {
+    font-size: 1.15rem; font-weight: 700; color: var(--text);
+  }
+
+  /* ─── SECTION HEADERS ─── */
+  .section-eyebrow {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem;
+  }
+  .section-eyebrow.blue { color: var(--blue); }
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem); font-weight: 800;
+    letter-spacing: -0.025em; line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .section-subtitle {
+    font-size: 1.05rem; color: var(--text-dim); max-width: 640px;
+    line-height: 1.7; margin-bottom: 3rem;
+  }
+
+  /* ─── BOTTLENECK CARDS ─── */
+  .bottleneck-grid {
+    display: grid; gap: 1.25rem;
+  }
+  .bottleneck-card {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 1.5rem;
+    align-items: start;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.75rem 2rem;
+    transition: all 0.3s;
+  }
+  .bottleneck-card:hover {
+    border-color: var(--gold); background: var(--bg-card-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 30px rgba(201,168,76,0.08);
+  }
+  .bn-number {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.85rem; color: var(--gold);
+    flex-shrink: 0;
+  }
+  .bn-content h3 {
+    font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+  .bn-content .problem {
+    font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+  .bn-content .solution {
+    font-size: 0.88rem; color: var(--text-dim); line-height: 1.65;
+  }
+  .bn-status {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--success); white-space: nowrap;
+    flex-shrink: 0; padding-top: 0.25rem;
+  }
+  .bn-status .check {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: rgba(52,211,153,0.15); border: 1.5px solid var(--success);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+  }
+
+  /* ─── AGENT GRID ─── */
+  .agent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+  }
+  .agent-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.5rem 1.75rem;
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .agent-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .agent-card:hover {
+    border-color: rgba(201,168,76,0.4); background: var(--bg-card-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .agent-card:hover::before { opacity: 1; }
+  .agent-card.featured {
+    border-color: var(--gold);
+    background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, var(--bg-card) 100%);
+    grid-column: 1 / -1;
+  }
+  .agent-card.featured::before { opacity: 1; height: 3px; }
+  .agent-header {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 0.85rem;
+  }
+  .agent-avatar {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.9rem; flex-shrink: 0;
+  }
+  .agent-avatar.gold { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); }
+  .agent-avatar.blue { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(0,194,255,0.3); }
+  .agent-name { font-weight: 700; font-size: 1rem; }
+  .agent-role {
+    font-size: 0.65rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--gold); margin-top: 0.1rem;
+  }
+  .agent-desc {
+    font-size: 0.88rem; color: var(--text-dim); line-height: 1.65;
+  }
+  .agent-card.featured .agent-desc { max-width: 640px; }
+  .agent-tasks {
+    margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.35rem;
+  }
+  .agent-task-tag {
+    font-size: 0.68rem; font-weight: 500; padding: 0.25rem 0.6rem;
+    border-radius: 6px; background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border); color: var(--text-muted);
+  }
+
+  .standard-pack {
+    margin-top: 2rem; padding: 1.75rem 2rem;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+  .standard-pack h3 {
+    font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem;
+    color: var(--text-dim);
+  }
+  .standard-pack p {
+    font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+  .pack-tags {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+  }
+  .pack-tag {
+    font-size: 0.68rem; font-weight: 500; padding: 0.3rem 0.7rem;
+    border-radius: 6px; background: var(--blue-dim);
+    border: 1px solid rgba(0,194,255,0.15); color: var(--blue);
+  }
+
+  /* ─── WORKFLOW CARDS ─── */
+  .workflow-list { display: grid; gap: 1.5rem; }
+  .workflow-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 2rem 2.25rem;
+    transition: all 0.3s; position: relative;
+  }
+  .workflow-card:hover {
+    border-color: rgba(0,194,255,0.3); background: var(--bg-card-hover);
+    box-shadow: 0 8px 30px rgba(0,194,255,0.06);
+  }
+  .wf-header {
+    display: flex; align-items: start; justify-content: space-between;
+    gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;
+  }
+  .wf-title { font-size: 1.15rem; font-weight: 700; }
+  .wf-badge {
+    font-size: 0.65rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border-radius: 6px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .wf-badge.live { background: rgba(52,211,153,0.12); color: var(--success); border: 1px solid rgba(52,211,153,0.25); }
+  .wf-badge.priority { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(201,168,76,0.25); }
+  .wf-desc {
+    font-size: 0.9rem; color: var(--text-dim); line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+  .wf-steps {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+  }
+  .wf-step {
+    background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+    border-radius: 10px; padding: 0.85rem 1rem;
+    display: flex; align-items: start; gap: 0.6rem;
+  }
+  .wf-step-num {
+    width: 22px; height: 22px; border-radius: 6px;
+    background: var(--blue-dim); border: 1px solid rgba(0,194,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: 700; color: var(--blue);
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .wf-step-text {
+    font-size: 0.8rem; color: var(--text-dim); line-height: 1.5;
+  }
+  .wf-cadence {
+    margin-top: 1rem; font-size: 0.75rem; color: var(--text-muted);
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .wf-cadence .clock { color: var(--blue); }
+
+  /* ─── DASHBOARD ─── */
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .dash-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.5rem;
+    text-align: center; transition: all 0.3s;
+  }
+  .dash-card:hover {
+    border-color: rgba(201,168,76,0.3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
+  }
+  .dash-number {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--blue); margin-bottom: 0.75rem;
+  }
+  .dash-metric {
+    font-size: 1.1rem; font-weight: 700; margin-bottom: 0.35rem;
+  }
+  .dash-why {
+    font-size: 0.82rem; color: var(--text-muted); line-height: 1.55;
+  }
+
+  /* ─── COMPOUND / FLYWHEEL ─── */
+  .flywheel-timeline {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
+    position: relative;
+  }
+  .flywheel-timeline::before {
+    content: ''; position: absolute;
+    top: 50%; left: 5%; right: 5%; height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--blue), var(--success));
+    opacity: 0.2; z-index: 0;
+  }
+  .fly-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.75rem; position: relative; z-index: 1;
+    transition: all 0.3s;
+  }
+  .fly-card:hover {
+    border-color: rgba(201,168,76,0.3); transform: translateY(-2px);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+  }
+  .fly-month {
+    font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.12em; margin-bottom: 0.85rem; padding: 0.3rem 0.7rem;
+    border-radius: 6px; display: inline-block;
+  }
+  .fly-card:nth-child(1) .fly-month { background: var(--gold-dim); color: var(--gold); }
+  .fly-card:nth-child(2) .fly-month { background: var(--blue-dim); color: var(--blue); }
+  .fly-card:nth-child(3) .fly-month { background: rgba(52,211,153,0.12); color: var(--success); }
+  .fly-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem; }
+  .fly-item {
+    font-size: 0.85rem; color: var(--text-dim); line-height: 1.6;
+    padding: 0.3rem 0; border-bottom: 1px solid var(--border);
+  }
+  .fly-item:last-child { border-bottom: none; }
+  .fly-item strong { color: var(--text); font-weight: 600; }
+
+  /* ─── CONTROL SECTION ─── */
+  .control-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .control-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.5rem 1.75rem;
+    transition: border-color 0.3s;
+  }
+  .control-card:hover { border-color: rgba(201,168,76,0.25); }
+  .control-card h3 {
+    font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .control-card h3 .icon { font-size: 1.1rem; }
+  .control-card p {
+    font-size: 0.85rem; color: var(--text-dim); line-height: 1.6;
+  }
+
+  /* ─── ROADMAP ─── */
+  .roadmap-list { display: grid; gap: 1rem; }
+  .roadmap-item {
+    display: grid; grid-template-columns: auto 1fr; gap: 1.5rem;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.75rem 2rem;
+    transition: all 0.3s;
+  }
+  .roadmap-item:hover {
+    border-color: rgba(201,168,76,0.3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  .rm-phase {
+    writing-mode: vertical-lr; text-orientation: mixed;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    min-height: 60px; transform: rotate(180deg);
+  }
+  .rm-content h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .rm-content .period {
+    font-size: 0.75rem; color: var(--blue); font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  .rm-milestones {
+    list-style: none; display: grid; gap: 0.35rem;
+  }
+  .rm-milestones li {
+    font-size: 0.85rem; color: var(--text-dim); line-height: 1.55;
+    padding-left: 1.25rem; position: relative;
+  }
+  .rm-milestones li::before {
+    content: '→'; position: absolute; left: 0; color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center; padding: 3rem 2rem 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .footer-brand {
+    font-size: 0.75rem; color: var(--text-muted); letter-spacing: 0.05em;
+  }
+  .footer-brand strong { color: var(--gold); font-weight: 600; }
+  .footer-sub {
+    font-size: 0.65rem; color: var(--text-muted); margin-top: 0.5rem;
+    opacity: 0.6;
+  }
+
+  /* ─── DIVIDER ─── */
+  .section-divider {
+    height: 1px; max-width: 1100px; margin: 0 auto;
+    background: linear-gradient(90deg, transparent, var(--border-light), transparent);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    section { padding: 4rem 1.25rem; }
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex; flex-direction: column;
+      position: absolute; top: 64px; left: 0; right: 0;
+      background: rgba(10,10,10,0.97); backdrop-filter: blur(20px);
+      padding: 1rem; border-bottom: 1px solid var(--border);
+    }
+    .nav-mobile-toggle { display: block; }
+    .bottleneck-card { grid-template-columns: auto 1fr; gap: 1rem; }
+    .bn-status { grid-column: 1 / -1; justify-self: start; }
+    .agent-grid { grid-template-columns: 1fr; }
+    .agent-card.featured { grid-column: 1; }
+    .flywheel-timeline { grid-template-columns: 1fr; }
+    .flywheel-timeline::before { display: none; }
+    .hero-stats { gap: 1.5rem; }
+    .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+    .wf-steps { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .dashboard-grid { grid-template-columns: 1fr; }
+    .wf-steps { grid-template-columns: 1fr; }
+    .hero-stats { flex-direction: column; gap: 1rem; }
+    .control-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════ NAV ════════════════════════ -->
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">Switch to America <span>× OSCortex</span></div>
+    <div class="nav-links" id="navLinks">
+      <a href="#problem">The Problem</a>
+      <a href="#team">Your Team</a>
+      <a href="#workflows">Workflows</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#compounding">Compounding</a>
+      <a href="#control">Your Domain</a>
+      <a href="#roadmap">90-Day Plan</a>
+    </div>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+  </div>
+</nav>
+
+<!-- ════════════════════════ HERO ════════════════════════ -->
+<section class="hero" id="top">
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      Cameron is Online
+    </div>
+    <h1>Your Business<br>Has an <span class="gold">Operating System</span> Now</h1>
+    <p class="subtitle">
+      Shannon, this is Cameron — and the team of 38 specialized agents running behind me.
+      We don't replace you. We replace the 28 hours a week you've been spending on work
+      that isn't recruiting builders, booking Zooms, or closing.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="number">38</div>
+        <div class="label">Active Agents</div>
+      </div>
+      <div class="hero-stat">
+        <div class="number">28h</div>
+        <div class="label">Weekly Hours Recovered</div>
+      </div>
+      <div class="hero-stat">
+        <div class="number">44K</div>
+        <div class="label">Contacts Reactivated</div>
+      </div>
+      <div class="hero-stat">
+        <div class="number">10×</div>
+        <div class="label">Revenue Target</div>
+      </div>
+    </div>
+    <div class="hero-north-star">
+      <div class="ns-label">★ North Star Metric</div>
+      <div class="ns-value">Booked Builder Zoom Appointments</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ════════════════════════ THE PROBLEM ════════════════════════ -->
+<section id="problem">
+  <div class="container">
+    <div class="section-eyebrow">What We Solved</div>
+    <h2 class="section-title">Five Bottlenecks That Were<br>Capping Your Growth</h2>
+    <p class="section-subtitle">
+      When you walked in, your AI Business Scorecard was 4.4 out of 10.
+      Task management and data reporting scored a 2. You weren't broken —
+      you were running a $216K/year business on pure will. Here's what the system replaced.
+    </p>
+
+    <div class="bottleneck-grid">
+
+      <div class="bottleneck-card">
+        <div class="bn-number">1</div>
+        <div class="bn-content">
+          <h3>Shannon Was the Operating System</h3>
+          <p class="problem">Every morning started with a manual activation ritual — check the CRM, draft the posts, nudge the prospects, answer the DMs. If you didn't touch it, nothing moved.</p>
+          <p class="solution">Cameron now runs a morning brief at 7 AM, evening report at 5 PM, and a Sunday night dashboard — automatically. Rebecca handles daily SMS and email outreach. Derrick produces and queues content by 5 AM. The machine runs whether you're at your desk or not.</p>
+        </div>
+        <div class="bn-status"><span class="check">✓</span> Solved</div>
+      </div>
+
+      <div class="bottleneck-card">
+        <div class="bn-number">2</div>
+        <div class="bn-content">
+          <h3>No Booked-Zoom Engine</h3>
+          <p class="problem">Every builder appointment was hand-built — a manual DM conversation, a back-and-forth to find a time, a hope they'd show up. No system, no pipeline, no follow-up sequence.</p>
+          <p class="solution">The Builder Appointment Engine watches for keyword triggers in real time, qualifies prospects on a local model, runs a 14-day multi-touch nurture sequence, and escalates hot prospects to you with a context card — name, pipeline stage, source, and talking points. Speed-to-lead: 60 seconds.</p>
+        </div>
+        <div class="bn-status"><span class="check">✓</span> Solved</div>
+      </div>
+
+      <div class="bottleneck-card">
+        <div class="bn-number">3</div>
+        <div class="bn-content">
+          <h3>44,000 Cold Leads Sitting Idle</h3>
+          <p class="problem">You had 44K+ contacts in your GHL sitting dormant. A previous re-engagement campaign fell flat. That database was a liability, not an asset.</p>
+          <p class="solution">The Dormant Lead Reactivation workflow pushes your GHL contacts into Meta custom audiences, retargets them with your HeyGen avatar Reels, and funnels responders into ManyChat DM sequences — no SMS blasting, exactly how you want it. The database comes back to life without you touching it.</p>
+        </div>
+        <div class="bn-status"><span class="check">✓</span> Solved</div>
+      </div>
+
+      <div class="bottleneck-card">
+        <div class="bn-number">4</div>
+        <div class="bn-content">
+          <h3>Operating by Feel, Not Numbers</h3>
+          <p class="problem">No dashboard. No KPIs. You knew the business "felt" strong or weak, but you couldn't point to the five numbers that mattered.</p>
+          <p class="solution">The 5-Number Monday Dashboard builds itself every Sunday night from your GHL API and Facebook Ads Manager. Booked Zooms, show-up rate, new leads by source, top content, and new builders enrolled — all waiting for you at 6 AM Monday. You'll know if you're winning before your coffee's ready.</p>
+        </div>
+        <div class="bn-status"><span class="check">✓</span> Solved</div>
+      </div>
+
+      <div class="bottleneck-card">
+        <div class="bn-number">5</div>
+        <div class="bn-content">
+          <h3>Tool Stack Disconnection</h3>
+          <p class="problem">GHL, Outlook, Facebook, HeyGen, Submagic, ManyChat — every tool was its own island. You were the bridge, manually uploading and copying between systems.</p>
+          <p class="solution">Cameron orchestrates the full stack through API connections. HeyGen renders flow to Submagic for captions, then to your social platforms. GHL polls feed the appointment engine. Facebook lead data routes to the qualifier. You stopped being the integration layer — the system is.</p>
+        </div>
+        <div class="bn-status"><span class="check">✓</span> Solved</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ════════════════════════ AGENT TEAM ════════════════════════ -->
+<section id="team">
+  <div class="container">
+    <div class="section-eyebrow">Your Agent Team</div>
+    <h2 class="section-title">38 Agents. Zero Employees.<br>One Operator: <span style="color:var(--gold)">You</span>.</h2>
+    <p class="section-subtitle">
+      Every agent below is built for your business — your three voices, your four ICPs, your GHL,
+      your HeyGen avatar, your compliance rules. They don't need managing. They report to Cameron, and Cameron reports to you.
+    </p>
+
+    <div class="agent-grid">
+
+      <!-- CAMERON — FEATURED -->
+      <div class="agent-card featured">
+        <div class="agent-header">
+          <div class="agent-avatar gold">C</div>
+          <div>
+            <div class="agent-name">Cameron</div>
+            <div class="agent-role">Chief of Staff &middot; Orchestrator</div>
+          </div>
+        </div>
+        <p class="agent-desc">
+          Your single point of contact. Cameron runs the morning brief at 7 AM MDT, the evening report at 5 PM, and the Sunday night dashboard build. Every other agent reports through Cameron — you never have to manage the roster directly.
+          When something needs your attention, Cameron surfaces it. When it doesn't, Cameron handles it.
+          Rule #1: Move first. Ask second.
+        </p>
+        <div class="agent-tasks">
+          <span class="agent-task-tag">7 AM Brief</span>
+          <span class="agent-task-tag">5 PM Report</span>
+          <span class="agent-task-tag">Sunday Dashboard</span>
+          <span class="agent-task-tag">Agent Coordination</span>
+          <span class="agent-task-tag">Decision Escalation</span>
+        </div>
+      </div>
+
+      <!-- SAMANTHA -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar gold">S</div>
+          <div>
+            <div class="agent-name">Samantha</div>
+            <div class="agent-role">Executive Prospecting Specialist</div>
+          </div>
+        </div>
+        <p class="agent-desc">
+          Runs LinkedIn outreach and email sequences targeting your Builder ICPs — the Capped Corporate Woman and the Burned-Out Business Owner. Manages your Dream 100 influencer target list, qualifies builder prospects, and books Zoom appointments on your calendar.
+        </p>
+        <div class="agent-tasks">
+          <span class="agent-task-tag">LinkedIn Outreach</span>
+          <span class="agent-task-tag">Dream 100</span>
+          <span class="agent-task-tag">Builder Qualification</span>
+          <span class="agent-task-tag">Zoom Booking</span>
+        </div>
+      </div>
+
+      <!-- REBECCA -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar gold">R</div>
+          <div>
+            <div class="agent-name">Rebecca</div>
+            <div class="agent-role">Daily Ops & Content Engine</div>
+          </div>
+        </div>
+        <p class="agent-desc">
+          Your daily operator. Rebecca handles SMS outreach through your GHL (+1 866-567-0832), runs email blitzes via Outlook, manages social engagement, maintains CRM pipeline stages, builds Facebook projects, and executes 5-day shopper machines and landing pages.
+        </p>
+        <div class="agent-tasks">
+          <span class="agent-task-tag">GHL SMS</span>
+          <span class="agent-task-tag">Outlook Email</span>
+          <span class="agent-task-tag">CRM Pipeline</span>
+          <span class="agent-task-tag">Shopper Machines</span>
+          <span class="agent-task-tag">Page Builds</span>
+        </div>
+      </div>
+
+      <!-- DERRICK -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar blue">D</div>
+          <div>
+            <div class="agent-name">Derrick</div>
+            <div class="agent-role">Social Media & Content Production</div>
+          </div>
+        </div>
+        <p class="agent-desc">
+          Writes every script. Runs the full video pipeline — HeyGen avatar render with your cloned voice, Submagic for captions, then multi-platform distribution. Generates images via fal.ai. Executes a 5-reel autonomous weekly rotation across Facebook, Instagram, TikTok, and LinkedIn.
+        </p>
+        <div class="agent-tasks">
+          <span class="agent-task-tag">Script Writing</span>
+          <span class="agent-task-tag">HeyGen Pipeline</span>
+          <span class="agent-task-tag">5-Reel Rotation</span>
+          <span class="agent-task-tag">Image Gen</span>
+          <span class="agent-task-tag">Multi-Platform</span>
+        </div>
+      </div>
+
+      <!-- LEAD QUALIFIER -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar blue">LQ</div>
+          <div>
+            <div class="agent-name">Lead Qualifier</div>
+            <div class="agent-role">Inbound Lead Triage</div>
+          </div>
+        </div>
+        <p class="agent-desc">
+          Reviews every inbound Facebook lead and tiers them: builder DNA, shopper potential, or looky-loo. Builder DNA gets routed to Samantha for fast outreach. Shoppers enter the 5-day machine. Looky-loos get tagged and parked — no wasted attention.
+        </p>
+        <div class="agent-tasks">
+          <span class="agent-task-tag">Lead Scoring</span>
+          <span class="agent-task-tag">Builder Detection</span>
+          <span class="agent-task-tag">Nurture Routing</span>
+        </div>
+      </div>
+
+      <!-- BUILDER APPOINTMENT ENGINE -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar gold">BA</div>
+          <div>
+            <div class="agent-name">Builder Appointment Engine</div>
+            <div class="agent-role">Keyword Trigger → Booked Zoom</div>
+          </div>
+        </div>
+        <p class="agent-desc">
+          Watches for keyword triggers — FREEDOM, SWITCH, PROOF, SWAP, RESULTS, TRUTH, CHECK, FRIDAY — in real time. Fires a 14-day multi-touch nurture sequence. Reactivates dormant contacts via Meta custom audiences and ManyChat. This is the machine behind your North Star metric.
+        </p>
+        <div class="agent-tasks">
+          <span class="agent-task-tag">Keyword Watch</span>
+          <span class="agent-task-tag">14-Day Nurture</span>
+          <span class="agent-task-tag">Meta Retargeting</span>
+          <span class="agent-task-tag">ManyChat DMs</span>
+        </div>
+      </div>
+
+      <!-- COMPLIANCE WATCHDOG -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar blue">CW</div>
+          <div>
+            <div class="agent-name">Compliance Watchdog</div>
+            <div class="agent-role">Content & Compliance Gate</div>
+          </div>
+        </div>
+        <p class="agent-desc">
+          Hard-blocks any content that names your parent company, makes unsubstantiated health claims, or violates FTC income disclosure rules. Soft-blocks borderline content with suggested fixes. Every piece of content passes through Watchdog before it reaches the public.
+        </p>
+        <div class="agent-tasks">
+          <span class="agent-task-tag">Brand Blackout</span>
+          <span class="agent-task-tag">Health Claims</span>
+          <span class="agent-task-tag">FTC Compliance</span>
+        </div>
+      </div>
+
+      <!-- REPORTING / DASHBOARD -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar blue">RD</div>
+          <div>
+            <div class="agent-name">Reporting Agent</div>
+            <div class="agent-role">5-Number Monday Dashboard</div>
+          </div>
+        </div>
+        <p class="agent-desc">
+          Builds your dashboard every Sunday night by pulling from the GHL API and Facebook Ads Manager. Delivers five numbers at 6 AM Monday: booked Zooms (builder vs. shopper split), show-up rate, new leads by source, best-performing content, and new builders enrolled.
+        </p>
+        <div class="agent-tasks">
+          <span class="agent-task-tag">GHL API Pull</span>
+          <span class="agent-task-tag">FB Ads Data</span>
+          <span class="agent-task-tag">Weekly Dashboard</span>
+        </div>
+      </div>
+
+      <!-- CALENDAR INTELLIGENCE -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar gold">CI</div>
+          <div>
+            <div class="agent-name">Calendar Intelligence</div>
+            <div class="agent-role">Daily Brief & Context Cards</div>
+          </div>
+        </div>
+        <p class="agent-desc">
+          Delivers your 6:30 AM daily brief with context cards for every Zoom on the day's schedule — prospect name, pipeline stage, how they found you, and custom talking points. Flags calendar conflicts and protects your time blocks so the system never double-books you.
+        </p>
+        <div class="agent-tasks">
+          <span class="agent-task-tag">6:30 AM Brief</span>
+          <span class="agent-task-tag">Context Cards</span>
+          <span class="agent-task-tag">Conflict Flags</span>
+        </div>
+      </div>
+
+      <!-- AEO CONTENT STRATEGIST -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar blue">AE</div>
+          <div>
+            <div class="agent-name">AEO Content Strategist</div>
+            <div class="agent-role">AI Search Visibility</div>
+          </div>
+        </div>
+        <p class="agent-desc">
+          Your parent company's brand blackout means AI search engines return nothing for 12 key queries. This agent executes a 90-day flanking strategy with schema-marked content targeting greenfield query categories. Runs a weekly AI search visibility probe to track progress.
+        </p>
+        <div class="agent-tasks">
+          <span class="agent-task-tag">AEO Strategy</span>
+          <span class="agent-task-tag">Schema Markup</span>
+          <span class="agent-task-tag">Weekly Probes</span>
+        </div>
+      </div>
+
+      <!-- COMPETITIVE INTELLIGENCE -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar gold">CV</div>
+          <div>
+            <div class="agent-name">Competitive Intelligence</div>
+            <div class="agent-role">Market & Opportunity Scanner</div>
+          </div>
+        </div>
+        <p class="agent-desc">
+          Monitors direct-sales companies that are collapsing, capping commissions, or losing top performers. Identifies experienced reps who are actively seeking their next move — the Burned-Out Business Owner ICP in real time — and feeds qualified names to Samantha for outreach.
+        </p>
+        <div class="agent-tasks">
+          <span class="agent-task-tag">Company Monitoring</span>
+          <span class="agent-task-tag">Rep Detection</span>
+          <span class="agent-task-tag">Prospect Feed</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- STANDARD PACK -->
+    <div class="standard-pack">
+      <h3>Plus: The Full OSCortex Standard Pack — 27 Additional Agents</h3>
+      <p>
+        Beyond your custom-built agents, you have access to the entire OSCortex standard suite.
+        These agents handle strategy, positioning, copy, lead processing, security, and more — all pre-configured and ready.
+      </p>
+      <div class="pack-tags">
+        <span class="pack-tag">North Star Navigator</span>
+        <span class="pack-tag">Positioning Lab</span>
+        <span class="pack-tag">Maxwell</span>
+        <span class="pack-tag">Vox</span>
+        <span class="pack-tag">Broadcast</span>
+        <span class="pack-tag">Adsmith</span>
+        <span class="pack-tag">Closer</span>
+        <span class="pack-tag">Welcome</span>
+        <span class="pack-tag">Scout</span>
+        <span class="pack-tag">Ledger</span>
+        <span class="pack-tag">Guardian</span>
+        <span class="pack-tag">Intel</span>
+        <span class="pack-tag">Pipeline</span>
+        <span class="pack-tag">LeadProfiler</span>
+        <span class="pack-tag">SequenceBrain</span>
+        <span class="pack-tag">ConvoReader</span>
+        <span class="pack-tag">ConversionScope</span>
+        <span class="pack-tag">Sage</span>
+        <span class="pack-tag">Arbiter</span>
+        <span class="pack-tag">Forge</span>
+        <span class="pack-tag">Sentinel</span>
+        <span class="pack-tag">Hermes</span>
+        <span class="pack-tag">Fleet</span>
+        <span class="pack-tag">Batch</span>
+        <span class="pack-tag">Webinar Forge</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ════════════════════════ WORKFLOWS ════════════════════════ -->
+<section id="workflows">
+  <div class="container">
+    <div class="section-eyebrow blue">Live Workflows</div>
+    <h2 class="section-title">What's Running For You Right Now</h2>
+    <p class="section-subtitle">
+      These aren't plans. They're live automations executing daily inside your system.
+      Each one runs on schedule, pulls real data, and produces real outputs.
+    </p>
+
+    <div class="workflow-list">
+
+      <!-- WORKFLOW 1 -->
+      <div class="workflow-card">
+        <div class="wf-header">
+          <div class="wf-title">Builder Appointment Machine</div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <span class="wf-badge priority">Priority #1</span>
+            <span class="wf-badge live">● Live</span>
+          </div>
+        </div>
+        <p class="wf-desc">
+          This is the engine behind your North Star. It watches for keyword triggers across your Facebook ecosystem,
+          qualifies prospects in under 60 seconds, and feeds them into a 14-day nurture sequence that culminates in a
+          booked 1:1 builder Zoom. No group calls. No friction. Just qualified appointments on your calendar.
+        </p>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="wf-step-num">1</div><div class="wf-step-text">GHL polled every 60 seconds for new triggers</div></div>
+          <div class="wf-step"><div class="wf-step-num">2</div><div class="wf-step-text">Keyword match: FREEDOM, SWITCH, PROOF, SWAP, RESULTS, TRUTH, CHECK, FRIDAY</div></div>
+          <div class="wf-step"><div class="wf-step-num">3</div><div class="wf-step-text">Lead qualified on local model — builder DNA vs. shopper vs. looky-loo</div></div>
+          <div class="wf-step"><div class="wf-step-num">4</div><div class="wf-step-text">14-day multi-touch nurture sequence activated</div></div>
+          <div class="wf-step"><div class="wf-step-num">5</div><div class="wf-step-text">Hot prospect escalated with context card</div></div>
+          <div class="wf-step"><div class="wf-step-num">6</div><div class="wf-step-text">1:1 Zoom booked on your calendar</div></div>
+        </div>
+        <div class="wf-cadence"><span class="clock">⟳</span> Continuous — 60-second polling cycle</div>
+      </div>
+
+      <!-- WORKFLOW 2 -->
+      <div class="workflow-card">
+        <div class="wf-header">
+          <div class="wf-title">Content-to-Distribution Pipeline</div>
+          <span class="wf-badge live">● Live</span>
+        </div>
+        <p class="wf-desc">
+          By the time you wake up, today's content is already written, rendered with your HeyGen TWIIN avatar and cloned voice,
+          captioned, and sitting in your review queue. One approval from you and it posts across all four platforms at 9 AM MDT.
+          Five reels a week, autonomous rotation, three distinct voices matched to the right platform.
+        </p>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="wf-step-num">1</div><div class="wf-step-text">5 AM: Derrick generates script matched to today's voice and ICP</div></div>
+          <div class="wf-step"><div class="wf-step-num">2</div><div class="wf-step-text">HeyGen renders your TWIIN avatar with cloned voice</div></div>
+          <div class="wf-step"><div class="wf-step-num">3</div><div class="wf-step-text">Submagic adds captions and visual polish</div></div>
+          <div class="wf-step"><div class="wf-step-num">4</div><div class="wf-step-text">Review queue — Shannon approves</div></div>
+          <div class="wf-step"><div class="wf-step-num">5</div><div class="wf-step-text">Auto-post: Facebook, Instagram, TikTok, LinkedIn at 9 AM MDT</div></div>
+        </div>
+        <div class="wf-cadence"><span class="clock">⟳</span> Daily, Monday through Saturday</div>
+      </div>
+
+      <!-- WORKFLOW 3 -->
+      <div class="workflow-card">
+        <div class="wf-header">
+          <div class="wf-title">Influencer Recruitment Engine</div>
+          <span class="wf-badge live">● Live</span>
+        </div>
+        <p class="wf-desc">
+          Your proven channel — YouTube and Instagram influencer partnerships — now runs as a systematic engine.
+          Daily research finds creators who already monetize via affiliate (Amazon, LTK) and are NOT in a competing MLM.
+          Each gets a personalized outreach opener in your voice, followed by a multi-touch sequence.
+          Target: 4 booked influencer Zooms per day.
+        </p>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="wf-step-num">1</div><div class="wf-step-text">Daily scan for YouTube/IG creators monetizing via affiliate</div></div>
+          <div class="wf-step"><div class="wf-step-num">2</div><div class="wf-step-text">Filter: no competing MLM involvement</div></div>
+          <div class="wf-step"><div class="wf-step-num">3</div><div class="wf-step-text">Personalized outreach opener in Shannon's voice</div></div>
+          <div class="wf-step"><div class="wf-step-num">4</div><div class="wf-step-text">Multi-touch follow-up sequence</div></div>
+          <div class="wf-step"><div class="wf-step-num">5</div><div class="wf-step-text">Goal: 4 booked influencer Zooms/day</div></div>
+        </div>
+        <div class="wf-cadence"><span class="clock">⟳</span> Daily research cycle</div>
+      </div>
+
+      <!-- WORKFLOW 4 -->
+      <div class="workflow-card">
+        <div class="wf-header">
+          <div class="wf-title">AEO Content Engine</div>
+          <span class="wf-badge live">● Live</span>
+        </div>
+        <p class="wf-desc">
+          Your parent company's brand blackout means AI search engines — ChatGPT, Perplexity, Gemini — return nothing
+          when people ask the exact questions your business answers. This 90-day flanking strategy publishes schema-marked
+          content targeting greenfield query categories, then runs a weekly probe to measure whether AI search engines
+          are surfacing your content where nothing existed before.
+        </p>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="wf-step-num">1</div><div class="wf-step-text">12-query baseline established across AI search engines</div></div>
+          <div class="wf-step"><div class="wf-step-num">2</div><div class="wf-step-text">Schema-marked content targets greenfield categories</div></div>
+          <div class="wf-step"><div class="wf-step-num">3</div><div class="wf-step-text">Weekly AI search visibility probe tracks progress</div></div>
+        </div>
+        <div class="wf-cadence"><span class="clock">⟳</span> 90-day strategy — weekly measurement cycle</div>
+      </div>
+
+      <!-- WORKFLOW 5 -->
+      <div class="workflow-card">
+        <div class="wf-header">
+          <div class="wf-title">Dormant Lead Reactivation</div>
+          <span class="wf-badge live">● Live</span>
+        </div>
+        <p class="wf-desc">
+          44,000+ contacts in your GHL that went cold — now being systematically reactivated. Your contacts feed into
+          Meta custom audiences, get retargeted with your HeyGen avatar Reels, and responders flow into ManyChat DM
+          sequences. No SMS blasting. This runs exactly the way you want it, through channels they're already watching.
+        </p>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="wf-step-num">1</div><div class="wf-step-text">44K GHL contacts synced to Meta custom audiences</div></div>
+          <div class="wf-step"><div class="wf-step-num">2</div><div class="wf-step-text">Reel content retargeting with your avatar</div></div>
+          <div class="wf-step"><div class="wf-step-num">3</div><div class="wf-step-text">ManyChat DM sequences for responders</div></div>
+        </div>
+        <div class="wf-cadence"><span class="clock">⟳</span> Continuous audience sync and retargeting</div>
+      </div>
+
+      <!-- WORKFLOW 6 -->
+      <div class="workflow-card">
+        <div class="wf-header">
+          <div class="wf-title">Daily Calendar Brief</div>
+          <span class="wf-badge live">● Live</span>
+        </div>
+        <p class="wf-desc">
+          Every morning at 6:30 AM MDT, Calendar Intelligence delivers a brief with context cards for every Zoom on
+          your schedule. You walk into each call knowing who you're talking to, where they came from, what pipeline
+          stage they're in, and exactly what to lead with. No more scrambling to remember context mid-call.
+        </p>
+        <div class="wf-steps">
+          <div class="wf-step"><div class="wf-step-num">1</div><div class="wf-step-text">6:30 AM: Today's Zooms scanned</div></div>
+          <div class="wf-step"><div class="wf-step-num">2</div><div class="wf-step-text">Context cards: name, source, stage, talking points</div></div>
+          <div class="wf-step"><div class="wf-step-num">3</div><div class="wf-step-text">Conflicts flagged, time blocks protected</div></div>
+        </div>
+        <div class="wf-cadence"><span class="clock">⟳</span> Daily at 6:30 AM MDT</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ════════════════════════ DASHBOARD ════════════════════════ -->
+<section id="dashboard">
+  <div class="container">
+    <div class="section-eyebrow blue">The 5-Number Monday Dashboard</div>
+    <h2 class="section-title">The Numbers That Move You to 10×</h2>
+    <p class="section-subtitle">
+      Every Sunday night, your Reporting Agent builds this dashboard from live data.
+      It's waiting for you at 6 AM Monday. Five numbers. No noise.
+      Here's what each one means for your path from $18K/month to $180K/month.
+    </p>
+
+    <div class="dashboard-grid">
+
+      <div class="dash-card">
+        <div class="dash-number">Metric #1</div>
+        <div class="dash-metric">Booked Zooms</div>
+        <p class="dash-why">Split by builder vs. shopper. Builder Zooms are the leading indicator of 10× growth. This is your North Star rendered as a weekly number. If this goes up, everything else follows.</p>
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-number">Metric #2</div>
+        <div class="dash-metric">Show-Up Rate</div>
+        <p class="dash-why">A booked Zoom that doesn't happen is a zero. This number tells you if your nurture sequences are building enough pre-call commitment. Below 70%? The system adjusts the sequence automatically.</p>
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-number">Metric #3</div>
+        <div class="dash-metric">New Leads by Source</div>
+        <p class="dash-why">Where are they coming from — Facebook ads, organic reels, influencer partnerships, dormant reactivation? This tells you where to double down and where to cut spend. No more guessing which channel is working.</p>
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-number">Metric #4</div>
+        <div class="dash-metric">Best-Performing Content</div>
+        <p class="dash-why">Which of Derrick's reels and posts generated the most engagement and leads? This feeds back into the content engine — Derrick learns what's working and adjusts the rotation. Your content gets smarter every week.</p>
+      </div>
+
+      <div class="dash-card">
+        <div class="dash-number">Metric #5</div>
+        <div class="dash-metric">New Builders Enrolled</div>
+        <p class="dash-why">The lagging indicator that confirms the system is working. Every new builder enrolled is a multiplication of your residual income. This is the number that compounds toward $2.16M/year.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ════════════════════════ COMPOUNDING ════════════════════════ -->
+<section id="compounding">
+  <div class="container">
+    <div class="section-eyebrow">The Flywheel Effect</div>
+    <h2 class="section-title">What Compounding Looks Like<br>In Your Business</h2>
+    <p class="section-subtitle">
+      OSCortex doesn't just automate — it compounds. Every week of data makes the system smarter.
+      Every new piece of content widens the funnel. Every builder enrolled multiplies the residual.
+      Here's what that trajectory looks like, specifically for Switch to America.
+    </p>
+
+    <div class="flywheel-timeline">
+
+      <div class="fly-card">
+        <div class="fly-month">Month 1–2</div>
+        <h3>Foundation & First Wins</h3>
+        <div class="fly-item"><strong>Content engine live:</strong> 20–24 avatar reels produced and posted with zero manual creation</div>
+        <div class="fly-item"><strong>Builder Appointment Machine:</strong> first automated Zoom bookings hitting your calendar</div>
+        <div class="fly-item"><strong>44K contacts:</strong> first Meta custom audiences built, retargeting active</div>
+        <div class="fly-item"><strong>AEO baseline:</strong> 12 AI search queries probed, first schema content published</div>
+        <div class="fly-item"><strong>Dashboard:</strong> first 5-Number Monday reports — you can see the system working</div>
+        <div class="fly-item"><strong>28 hours/week freed</strong> — reinvested into builder Zooms and influencer partnerships</div>
+      </div>
+
+      <div class="fly-card">
+        <div class="fly-month">Month 3–6</div>
+        <h3>Acceleration</h3>
+        <div class="fly-item"><strong>Content library:</strong> 100+ reels in rotation — organic reach compounds with volume</div>
+        <div class="fly-item"><strong>Influencer engine:</strong> systematic partnerships generating builder leads from outside your existing network</div>
+        <div class="fly-item"><strong>Dormant database:</strong> reactivation sequences surfacing warm prospects from 44K contacts weekly</div>
+        <div class="fly-item"><strong>AEO breakthrough:</strong> AI search engines begin surfacing your content for greenfield queries</div>
+        <div class="fly-item"><strong>Lead Qualifier:</strong> scoring accuracy improves from months of data — fewer wasted calls</div>
+        <div class="fly-item"><strong>Competitive Intel:</strong> first wave of experienced reps from collapsing companies identified and contacted</div>
+      </div>
+
+      <div class="fly-card">
+        <div class="fly-month">Month 6–12</div>
+        <h3>Compound Growth</h3>
+        <div class="fly-item"><strong>250+ reels live</strong> — your three voices (Patriot Mother, Soft Mom, Ambitious Leader) are a content moat</div>
+        <div class="fly-item"><strong>Builder pipeline is self-feeding:</strong> new builders recruit their own, your system onboards them</div>
+        <div class="fly-item"><strong>AI search presence established</strong> where competitors have zero visibility</div>
+        <div class="fly-item"><strong>Influencer partnerships:</strong> recurring deal flow from creators who've seen results</div>
+        <div class="fly-item"><strong>Dashboard trends:</strong> 6+ months of data reveals seasonal patterns, conversion benchmarks, and optimization opportunities</div>
+        <div class="fly-item"><strong>Revenue trajectory:</strong> the compounding builder base moves toward the $2.16M/year target</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ════════════════════════ CONTROL ════════════════════════ -->
+<section id="control">
+  <div class="container">
+    <div class="section-eyebrow">Shannon's Domain</div>
+    <h2 class="section-title">What You Keep.<br>What Cameron Never Touches.</h2>
+    <p class="section-subtitle">
+      The system is built to amplify you, not replace you. These are the things that stay in your hands
+      because they should — your judgment, your relationships, your instinct for people.
+    </p>
+
+    <div class="control-grid">
+
+      <div class="control-card">
+        <h3><span class="icon">🎯</span> Builder Zoom Calls</h3>
+        <p>The 1:1 Zoom is where builders decide. Cameron books them, prepares context cards, and makes sure you walk in ready — but the call itself is yours. Your energy, your story, your close.</p>
+      </div>
+
+      <div class="control-card">
+        <h3><span class="icon">✅</span> Content Approval</h3>
+        <p>Derrick produces. Compliance Watchdog reviews. But nothing goes live until you approve it. Your voice, your brand, your final call on what represents Switch to America.</p>
+      </div>
+
+      <div class="control-card">
+        <h3><span class="icon">🤝</span> Relationship Decisions</h3>
+        <p>Which influencers to pursue seriously. Which builders to invest extra time in. Which partnerships to deepen. The system qualifies and recommends — you decide who gets your personal attention.</p>
+      </div>
+
+      <div class="control-card">
+        <h3><span class="icon">📐</span> Strategic Direction</h3>
+        <p>Should you double down on TikTok or shift to LinkedIn? Launch a new ICP angle? Adjust the offer? Cameron presents the data. You set the direction. The system follows.</p>
+      </div>
+
+      <div class="control-card">
+        <h3><span class="icon">💬</span> High-Touch Conversations</h3>
+        <p>When a prospect needs a real human conversation — not a sequence, not a DM — that's you. The system identifies these moments and surfaces them instead of automating them away.</p>
+      </div>
+
+      <div class="control-card">
+        <h3><span class="icon">🛡️</span> Compliance Final Say</h3>
+        <p>Watchdog catches violations automatically. But compliance judgment calls — the gray areas — are escalated to you. You're the final authority on what's safe to publish.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ════════════════════════ ROADMAP ════════════════════════ -->
+<section id="roadmap">
+  <div class="container">
+    <div class="section-eyebrow">What Happens Next</div>
+    <h2 class="section-title">Your 90-Day Plan</h2>
+    <p class="section-subtitle">
+      The system is live. Now it's about measuring, optimizing, and compounding.
+      Here's the milestone map for the next 90 days.
+    </p>
+
+    <div class="roadmap-list">
+
+      <div class="roadmap-item">
+        <div class="rm-phase">Phase 1</div>
+        <div class="rm-content">
+          <h3>Validate & Calibrate</h3>
+          <div class="period">Days 1–30</div>
+          <ul class="rm-milestones">
+            <li>All workflows live and producing daily outputs — content, leads, reports</li>
+            <li>First 4 weekly dashboards delivered — baseline metrics established</li>
+            <li>Builder Appointment Machine: measure first 30-day conversion funnel end-to-end</li>
+            <li>Influencer engine running daily: validate 4 booked Zooms/day target</li>
+            <li>Dormant reactivation: first cohort of 44K contacts through Meta retargeting</li>
+            <li>AEO: first batch of schema-marked content indexed, first visibility probe results</li>
+            <li>Calibrate nurture sequence timing and messaging based on early response data</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="rm-phase">Phase 2</div>
+        <div class="rm-content">
+          <h3>Optimize & Scale</h3>
+          <div class="period">Days 31–60</div>
+          <ul class="rm-milestones">
+            <li>Content engine optimization: double down on top-performing formats and angles</li>
+            <li>Lead Qualifier accuracy review: retrain scoring based on actual conversion data</li>
+            <li>Influencer partnerships: shift from outreach volume to relationship depth with converting creators</li>
+            <li>Show-up rate optimization: if below 70%, adjust pre-call nurture sequence</li>
+            <li>AEO mid-point: assess which greenfield queries are gaining traction, pivot underperformers</li>
+            <li>Competitive Intel: first batch of qualified reps from collapsing companies contacted</li>
+            <li>Second dormant reactivation cohort launched with refined messaging</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="roadmap-item">
+        <div class="rm-phase">Phase 3</div>
+        <div class="rm-content">
+          <h3>Compound & Expand</h3>
+          <div class="period">Days 61–90</div>
+          <ul class="rm-milestones">
+            <li>90-day trend analysis: full-quarter dashboard reveals patterns invisible in weekly data</li>
+            <li>AEO 90-day assessment: measure visibility lift against 12-query baseline</li>
+            <li>Content library exceeds 75 published pieces — organic reach compounding</li>
+            <li>Builder pipeline review: identify the enrollment path that converts best and systematize it</li>
+            <li>Scorecard reassessment: measure improvement from 4.4/10 composite baseline</li>
+            <li>Define Phase 2 expansion priorities: new ICPs, new channels, or deeper automation of winning channels</li>
+            <li>Recoverable time audit: confirm 28 hours/week recovery and identify next optimization targets</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ PERSISTENCE NOTE ════════════════════════ -->
+<section style="padding: 3rem 2rem;">
+  <div class="container">
+    <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 2rem 2.25rem; max-width: 720px; margin: 0 auto; text-align: center;">
+      <p style="font-size: 0.75rem; color: var(--gold); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.75rem;">
+        One More Thing
+      </p>
+      <p style="font-size: 1.05rem; font-weight: 600; margin-bottom: 0.75rem;">
+        Your previous agents — Samantha, Rebecca, Derrick — were wiped in a platform reset.
+      </p>
+      <p style="font-size: 0.9rem; color: var(--text-dim); line-height: 1.7;">
+        That can't happen anymore. OSCortex writes every decision, every lead interaction, every workflow adjustment to persistent memory files that survive session resets. Your agents don't just run — they <em>remember</em>. The longer the system runs, the more it knows about your business, your builders, and what works. Nothing important gets lost to a session boundary again.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════ FOOTER ════════════════════════ -->
+<footer>
+  <p class="footer-brand">Built by <strong>AI Momentum Labs</strong> for Switch to America</p>
+  <p class="footer-sub">Cameron and 37 agents standing by. Let's build.</p>
+</footer>
+
+<!-- ════════════════════════ JS ════════════════════════ -->
+<script>
+  // Nav scroll effect
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Mobile nav toggle
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    links.classList.toggle('open');
+    toggle.textContent = links.classList.contains('open') ? '✕' : '☰';
+  });
+  links.addEventListener('click', (e) => {
+    if (e.target.tagName === 'A') {
+      links.classList.remove('open');
+      toggle.textContent = '☰';
+    }
+  });
+
+  // Smooth reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.bottleneck-card, .agent-card, .workflow-card, .dash-card, .fly-card, .control-card, .roadmap-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease, border-color 0.3s, background 0.3s, box-shadow 0.3s';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
