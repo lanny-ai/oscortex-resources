@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OSCortex — Language, Positioning &amp; Capabilities Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:         #0f0f0f;
+      --bg2:        #161616;
+      --bg3:        #1e1e1e;
+      --bg4:        #242424;
+      --border:     #2a2a2a;
+      --accent:     #00d4ff;
+      --accent-dim: rgba(0,212,255,0.12);
+      --accent-glow:rgba(0,212,255,0.25);
+      --text:       #f0f0f0;
+      --text-muted: #8a8a8a;
+      --text-dim:   #b0b0b0;
+      --danger:     #ff4d4d;
+      --success:    #00e676;
+      --nav-h:      60px;
+      --radius:     10px;
+      --radius-lg:  16px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    ::selection { background: var(--accent); color: #000; }
+
+    /* ─── SCROLLBAR ────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ─── NAV ──────────────────────────────────────────────────── */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      background: rgba(15,15,15,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center;
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; width: 100%;
+      padding: 0 24px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .nav-logo {
+      font-size: 17px; font-weight: 800; letter-spacing: -0.5px;
+      color: var(--text); white-space: nowrap; flex-shrink: 0;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-aml { color: var(--text) !important; font-weight: 700; font-size: 0.85em; letter-spacing: 0.02em; }
+    .nav-divider { color: var(--text-muted) !important; font-weight: 300; margin: 0 6px; }
+    .nav-links {
+      display: flex; align-items: center; gap: 2px;
+      flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch; flex: 1;
+    }
+    .nav-links::-webkit-scrollbar { display: none; }
+    .nav-links a {
+      color: var(--text-muted); font-size: 12px; font-weight: 500;
+      padding: 6px 10px; border-radius: 6px; white-space: nowrap;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--accent); background: var(--accent-dim);
+      text-decoration: none;
+    }
+
+    /* ─── LAYOUT ───────────────────────────────────────────────── */
+    .page { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── HERO ─────────────────────────────────────────────────── */
+    #hero {
+      min-height: 420px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center;
+      padding: calc(var(--nav-h) + 60px) 24px 80px;
+      position: relative; overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 50% at 50% 60%, rgba(0,212,255,0.07), transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--accent-dim); border: 1px solid var(--accent-glow);
+      border-radius: 20px; padding: 6px 14px; margin-bottom: 28px;
+      font-size: 11px; font-weight: 600; letter-spacing: 1px;
+      color: var(--accent); text-transform: uppercase;
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.5; transform: scale(0.8); }
+    }
+    .hero-title {
+      font-size: clamp(52px, 10vw, 96px);
+      font-weight: 900; letter-spacing: -4px; line-height: 1;
+      background: linear-gradient(135deg, #ffffff 30%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 16px;
+    }
+    .hero-company {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+      opacity: 0.85;
+    }
+    .hero-tagline {
+      font-size: clamp(18px, 3vw, 26px); font-weight: 300;
+      color: var(--text-dim); letter-spacing: 0.5px; margin-bottom: 10px;
+    }
+    .hero-sub {
+      font-size: 14px; color: var(--text-muted); margin-bottom: 0;
+    }
+    .hero-meta {
+      display: flex; gap: 24px; margin-top: 36px; justify-content: center; flex-wrap: wrap;
+    }
+    .hero-meta-item {
+      font-size: 12px; color: var(--text-muted);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .hero-meta-item .dot { color: var(--accent); font-size: 16px; }
+
+    /* ─── SECTION BLOCKS ───────────────────────────────────────── */
+    section {
+      padding: 72px 0 0;
+      scroll-margin-top: calc(var(--nav-h) + 16px);
+    }
+    section:last-of-type { padding-bottom: 80px; }
+
+    .section-header {
+      display: flex; align-items: baseline; gap: 14px; margin-bottom: 32px;
+    }
+    .section-num {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      letter-spacing: 2px; text-transform: uppercase;
+      background: var(--accent-dim); border: 1px solid var(--accent-glow);
+      border-radius: 4px; padding: 3px 8px; white-space: nowrap;
+    }
+    h2 {
+      font-size: clamp(22px, 4vw, 32px); font-weight: 800;
+      letter-spacing: -0.8px; color: var(--text); line-height: 1.2;
+    }
+    h3 {
+      font-size: 18px; font-weight: 700; color: var(--text);
+      margin-bottom: 12px; margin-top: 32px; letter-spacing: -0.3px;
+    }
+    h3:first-child { margin-top: 0; }
+    h4 {
+      font-size: 15px; font-weight: 600; color: var(--accent);
+      margin-bottom: 8px; margin-top: 20px; letter-spacing: 0.2px;
+    }
+    p { color: var(--text-dim); margin-bottom: 14px; line-height: 1.75; }
+    p:last-child { margin-bottom: 0; }
+    ul, ol { padding-left: 20px; margin-bottom: 14px; color: var(--text-dim); }
+    li { margin-bottom: 6px; line-height: 1.7; }
+    li strong { color: var(--text); }
+    strong { color: var(--text); }
+    em { font-style: italic; color: var(--text-muted); }
+
+    /* ─── DIVIDER ──────────────────────────────────────────────── */
+    hr {
+      border: none; border-top: 1px solid var(--border);
+      margin: 40px 0;
+    }
+
+    /* ─── BLOCKQUOTE ───────────────────────────────────────────── */
+    blockquote {
+      border-left: 3px solid var(--accent);
+      padding: 16px 20px;
+      background: var(--bg2);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 20px 0;
+      color: var(--text-dim);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    blockquote p { margin: 0; color: var(--text-dim); }
+    blockquote + blockquote { margin-top: 12px; }
+
+    /* ─── HIGHLIGHT BOX (One-Sentence Answer) ──────────────────── */
+    .highlight-box {
+      background: linear-gradient(135deg, var(--bg2), var(--bg3));
+      border: 1px solid var(--accent-glow);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      margin: 24px 0;
+      position: relative; overflow: hidden;
+    }
+    .highlight-box::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+    .highlight-box p {
+      font-size: 16px; font-weight: 500;
+      color: var(--text); margin: 0; line-height: 1.75;
+    }
+    .highlight-box-label {
+      font-size: 10px; font-weight: 700; color: var(--accent);
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+    }
+
+    /* ─── CARD GRID ────────────────────────────────────────────── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px; margin-top: 20px;
+    }
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 24px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .card:hover { border-color: var(--accent-glow); transform: translateY(-2px); }
+    .card h3 { font-size: 15px; margin-top: 0; color: var(--accent); }
+    .card p { font-size: 14px; margin-bottom: 0; }
+    .card ul { font-size: 14px; margin-bottom: 0; }
+
+    /* ─── TABLES ───────────────────────────────────────────────── */
+    .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: var(--radius); }
+    table {
+      width: 100%; border-collapse: collapse;
+      font-size: 14px;
+    }
+    thead tr {
+      background: var(--bg3);
+    }
+    thead th {
+      padding: 12px 16px; text-align: left;
+      color: var(--accent); font-weight: 700; font-size: 12px;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody tr { transition: background 0.15s; }
+    tbody tr:nth-child(odd)  { background: var(--bg2); }
+    tbody tr:nth-child(even) { background: var(--bg3); }
+    tbody tr:hover { background: var(--bg4); }
+    td {
+      padding: 12px 16px; color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+      vertical-align: top; line-height: 1.6;
+    }
+    td:first-child { color: var(--text); font-weight: 500; }
+    td strong { color: var(--text); }
+
+    /* ─── VALUE CHAIN TABLES ───────────────────────────────────── */
+    .vc-table thead th:last-child { color: var(--success); }
+    .vc-table td:last-child { color: var(--text-dim); font-style: italic; }
+
+    /* ─── VERTICAL TABS (Client Types) ────────────────────────── */
+    .client-tabs {
+      display: flex; gap: 16px; margin-top: 20px; align-items: flex-start;
+    }
+    .tab-nav {
+      flex-shrink: 0; display: flex; flex-direction: column; gap: 4px;
+      width: 180px;
+    }
+    .tab-btn {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 10px 14px;
+      color: var(--text-muted); font-size: 13px; font-weight: 500;
+      cursor: pointer; text-align: left; transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+    .tab-btn:hover { border-color: var(--accent-glow); color: var(--text); }
+    .tab-btn.active {
+      background: var(--accent-dim); border-color: var(--accent-glow);
+      color: var(--accent);
+    }
+    .tab-content { flex: 1; min-width: 0; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ─── COMPOUNDING TIMELINE ─────────────────────────────────── */
+    .timeline {
+      display: flex; flex-direction: column; gap: 0; margin: 24px 0;
+      position: relative;
+    }
+    .timeline::before {
+      content: ''; position: absolute; left: 60px; top: 24px; bottom: 24px;
+      width: 2px; background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+    .timeline-item {
+      display: flex; gap: 24px; align-items: flex-start;
+      padding: 16px 0;
+    }
+    .timeline-marker {
+      flex-shrink: 0; width: 52px; text-align: right;
+    }
+    .timeline-label {
+      font-size: 11px; font-weight: 800; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 1px;
+      background: var(--bg); position: relative; z-index: 1;
+      padding: 2px 0;
+    }
+    .timeline-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 8px var(--accent-glow);
+      flex-shrink: 0; margin-top: 6px;
+      position: relative; z-index: 1;
+    }
+    .timeline-body {
+      flex: 1; background: var(--bg2);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .timeline-body p { font-size: 14px; margin: 0; }
+
+    /* ─── WORDS GRID ───────────────────────────────────────────── */
+    .words-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 10px; margin-top: 16px;
+    }
+    .word-chip {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 12px 14px;
+    }
+    .word-chip.good { border-color: rgba(0,230,118,0.25); }
+    .word-chip.bad  { border-color: rgba(255,77,77,0.25); }
+    .word-chip-label {
+      font-size: 13px; font-weight: 700; margin-bottom: 4px;
+    }
+    .word-chip.good .word-chip-label { color: var(--success); }
+    .word-chip.bad  .word-chip-label { color: var(--danger); }
+    .word-chip p { font-size: 12px; margin: 0; line-height: 1.5; }
+
+    /* ─── ACCORDION (Field Scripts) ────────────────────────────── */
+    .accordion { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+    .acc-item {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .acc-item.open { border-color: var(--accent-glow); }
+    .acc-trigger {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px; cursor: pointer; gap: 12px;
+      background: transparent; border: none; width: 100%;
+      font-family: 'Inter', sans-serif; text-align: left;
+    }
+    .acc-trigger:hover { background: rgba(255,255,255,0.02); }
+    .acc-q {
+      font-size: 15px; font-weight: 600; color: var(--text);
+    }
+    .acc-q::before {
+      content: '"'; color: var(--accent); margin-right: 2px;
+    }
+    .acc-q::after {
+      content: '"'; color: var(--accent); margin-left: 2px;
+    }
+    .acc-icon {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--bg3); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: transform 0.3s, background 0.2s;
+      color: var(--accent); font-size: 14px; font-weight: 700;
+    }
+    .acc-item.open .acc-icon { transform: rotate(45deg); background: var(--accent-dim); }
+    .acc-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      padding: 0 22px;
+    }
+    .acc-item.open .acc-body {
+      max-height: 2000px; padding-bottom: 22px;
+    }
+    .acc-body blockquote { margin: 0 0 12px; }
+    .acc-body blockquote:last-child { margin-bottom: 0; }
+    .acc-note {
+      font-size: 13px; color: var(--text-muted); margin-top: 12px;
+      font-style: italic;
+    }
+    .acc-sub-label {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 1.2px;
+      margin: 16px 0 8px;
+    }
+
+    /* ─── QUICK REFERENCE CARD ─────────────────────────────────── */
+    #quick-ref-card {
+      background: var(--bg2);
+      border: 2px solid var(--accent-glow);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 0 40px rgba(0,212,255,0.12), 0 0 80px rgba(0,212,255,0.05),
+                  inset 0 0 40px rgba(0,212,255,0.02);
+      padding: 36px 40px;
+      position: relative; overflow: hidden;
+      margin-top: 20px;
+    }
+    #quick-ref-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+    #quick-ref-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+    }
+    .qr-header {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
+    }
+    .qr-icon {
+      width: 40px; height: 40px; border-radius: var(--radius);
+      background: var(--accent-dim); border: 1px solid var(--accent-glow);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .qr-title { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+    .qr-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    #quick-ref-card table td { font-size: 13px; }
+    #quick-ref-card table thead th { font-size: 11px; }
+    #quick-ref-card .table-wrap { margin: 0; }
+    #quick-ref-card table tbody tr:nth-child(odd)  { background: rgba(255,255,255,0.03); }
+    #quick-ref-card table tbody tr:nth-child(even) { background: rgba(255,255,255,0.015); }
+
+    /* ─── PRICING ──────────────────────────────────────────────── */
+    .pricing-cards {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px; margin-top: 20px;
+    }
+    .pricing-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .pricing-card:hover { border-color: var(--accent-glow); transform: translateY(-2px); }
+    .pricing-card.featured {
+      border-color: var(--accent-glow);
+      box-shadow: 0 0 24px rgba(0,212,255,0.1);
+    }
+    .pricing-tier {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px;
+    }
+    .pricing-setup {
+      font-size: 13px; color: var(--text-muted); margin-bottom: 8px;
+    }
+    .pricing-setup strong { color: var(--text); }
+    .pricing-monthly {
+      font-size: 36px; font-weight: 900; letter-spacing: -1.5px;
+      color: var(--text); margin-bottom: 4px; line-height: 1;
+    }
+    .pricing-monthly span { font-size: 14px; color: var(--text-muted); font-weight: 400; }
+    .pricing-users {
+      font-size: 13px; color: var(--text-muted); margin-bottom: 16px;
+    }
+    .pricing-note {
+      font-size: 12px; color: var(--text-muted); padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ─── CLOSING PRINCIPLE ─────────────────────────────────────── */
+    .closing-idea {
+      background: linear-gradient(135deg, var(--bg2), var(--bg3));
+      border: 1px solid var(--accent-glow);
+      border-radius: var(--radius-lg); padding: 36px 40px;
+      text-align: center; margin: 24px 0;
+      position: relative; overflow: hidden;
+    }
+    .closing-idea::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 50% 50%, rgba(0,212,255,0.05), transparent 70%);
+    }
+    .closing-idea p {
+      font-size: 20px; font-weight: 700; letter-spacing: -0.4px;
+      color: var(--text); line-height: 1.5; margin: 0; position: relative;
+    }
+
+    /* ─── HOW TO USE INTRO ─────────────────────────────────────── */
+    .intro-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px; margin-top: 20px;
+    }
+    .intro-item {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px 18px;
+      font-size: 13px; color: var(--text-dim);
+    }
+    .intro-item-title {
+      font-size: 12px; font-weight: 700; color: var(--accent);
+      margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    /* ─── CAPABILITY SECTION CARDS ─────────────────────────────── */
+    .cap-section { margin-bottom: 36px; }
+    .cap-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+    }
+    .cap-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--accent-dim); border: 1px solid var(--accent-glow);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0;
+    }
+    .cap-header h3 { margin: 0; font-size: 17px; color: var(--text); }
+
+    /* ─── FOOTER ───────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .footer-inner { max-width: 960px; margin: 0 auto; }
+    .footer-brand {
+      font-size: 15px; font-weight: 700; color: var(--text);
+      margin-bottom: 4px;
+    }
+    .footer-brand span { color: var(--accent); }
+    .footer-tag {
+      font-size: 12px; color: var(--text-muted); letter-spacing: 0.5px;
+    }
+    .footer-tag::before { content: '⚠ '; }
+
+    /* ─── MOBILE ───────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .client-tabs { flex-direction: column; }
+      .tab-nav { width: 100%; flex-direction: row; overflow-x: auto; }
+      .tab-btn { white-space: nowrap; }
+      .timeline::before { left: 46px; }
+      .timeline-marker { width: 40px; }
+      #quick-ref-card { padding: 24px 20px; }
+      .closing-idea { padding: 28px 24px; }
+      .closing-idea p { font-size: 17px; }
+      .hero-meta { flex-direction: column; gap: 10px; }
+      .section-header { flex-direction: column; gap: 8px; }
+      h2 { font-size: 22px; }
+    }
+    @media (max-width: 480px) {
+      .nav-links { gap: 1px; }
+      .nav-links a { font-size: 11px; padding: 5px 7px; }
+      .pricing-monthly { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────── -->
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="nav-logo"><span class="nav-aml">AI Momentum Labs</span> <span class="nav-divider">·</span> OS<span>Cortex</span></div>
+    <div class="nav-links" id="navLinks">
+      <a href="#intro">Intro</a>
+      <a href="#part1">P1: One Line</a>
+      <a href="#part2">P2: Capabilities</a>
+      <a href="#part3">P3: Value Chain</a>
+      <a href="#part4">P4: Client Types</a>
+      <a href="#part5">P5: Flywheel</a>
+      <a href="#part6">P6: Words ✓</a>
+      <a href="#part7">P7: Words ✗</a>
+      <a href="#part8">P8: Scripts</a>
+      <a href="#part9">P9: Closing</a>
+      <a href="#quickref">Quick Ref</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ──────────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    AI Momentum Labs · UK Sales Team
+  </div>
+  <p class="hero-company">AI Momentum Labs</p>
+  <h1 class="hero-title">OSCortex</h1>
+  <p class="hero-tagline">Your Virtual Workforce</p>
+  <p class="hero-sub">Language, Positioning &amp; Capabilities Guide</p>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><span class="dot">●</span> Ben Richardson &amp; Ady Burton</div>
+    <div class="hero-meta-item"><span class="dot">●</span> Version 1.0 · June 2026</div>
+    <div class="hero-meta-item"><span class="dot">●</span> aimomentumlabs.com</div>
+  </div>
+</section>
+
+<div class="page">
+
+<!-- ── INTRO ─────────────────────────────────────────────────────── -->
+<section id="intro">
+  <div class="section-header">
+    <span class="section-num">How to Use</span>
+    <h2>Your Single Reference for Every Sales Conversation</h2>
+  </div>
+  <p>This is your single reference for every sales conversation about OSCortex. It covers what to say, how to say it, who you're saying it to, and the exact words that close deals.</p>
+  <p>Read it once, front to back. Then use the sections as quick-reference before calls.</p>
+
+  <div class="intro-grid">
+    <div class="intro-item">
+      <div class="intro-item-title">🎯 Memorise First</div>
+      The One-Sentence Answer — Part 1
+    </div>
+    <div class="intro-item">
+      <div class="intro-item-title">💰 Where Deals Are Won</div>
+      The Value Chain — Part 3
+    </div>
+    <div class="intro-item">
+      <div class="intro-item-title">🗣 Live Calls</div>
+      Field Scripts — Part 8
+    </div>
+    <div class="intro-item">
+      <div class="intro-item-title">🎯 Before Every Call</div>
+      Client Type Positioning — Part 4
+    </div>
+    <div class="intro-item">
+      <div class="intro-item-title">🚀 Instant Reference</div>
+      Quick Reference Card — Bottom
+    </div>
+    <div class="intro-item">
+      <div class="intro-item-title">📋 Pricing</div>
+      Commercial &amp; Solo tiers
+    </div>
+  </div>
+</section>
+
+<!-- ── PART 1 ─────────────────────────────────────────────────────── -->
+<section id="part1">
+  <div class="section-header">
+    <span class="section-num">Part 1</span>
+    <h2>The One-Sentence Answer</h2>
+  </div>
+
+  <div class="highlight-box">
+    <div class="highlight-box-label">🔴 Memorise This</div>
+    <p>"OSCortex is a permanent AI workforce that runs inside your business — it handles your communications, research, content, admin, and follow-ups around the clock, and it gets smarter about your specific business the longer it runs."</p>
+  </div>
+
+  <h3>The Expanded Version</h3>
+  <p><em>For when they lean in.</em></p>
+  <blockquote>
+    <p>"OSCortex is a fully deployed AI operating system that lives inside your business permanently. It handles real work — answering enquiries, writing proposals, researching prospects, managing your pipeline, creating content, chasing follow-ups — across WhatsApp, email, and every channel you use, 24 hours a day. And because it remembers everything and builds a knowledge base around YOUR business specifically, it compounds in value every single month. At six months it knows your business. At twelve months it knows it better than most of your staff. It's not a tool you log into. It's your virtual workforce."</p>
+  </blockquote>
+
+  <h3>Why This Works</h3>
+  <p>The one-sentence version gives them three things instantly:</p>
+  <ul>
+    <li><strong>What it is</strong> — a permanent AI workforce (not software, not a chatbot)</li>
+    <li><strong>What it does</strong> — handles their actual daily work</li>
+    <li><strong>Why it's different</strong> — it learns their business specifically</li>
+  </ul>
+  <p>Never open with features. Always open with the shape of the thing — then let them pull you into specifics.</p>
+</section>
+
+<!-- ── PART 2 ─────────────────────────────────────────────────────── -->
+<section id="part2">
+  <div class="section-header">
+    <span class="section-num">Part 2</span>
+    <h2>What OSCortex Does — Full Capabilities</h2>
+  </div>
+  <p><em>Written so a 55-year-old hotel owner or workwear company director can follow every word.</em></p>
+
+  <!-- Communications -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon">💬</div>
+      <h3>Communications — Your Messages, Handled</h3>
+    </div>
+    <p>OSCortex manages your business communications across every channel, simultaneously.</p>
+    <ul>
+      <li><strong>WhatsApp</strong> — Reads incoming messages, responds in your voice, routes urgent ones to you, sends follow-ups, and even sends voice notes. Your prospects and customers get fast, thoughtful replies — whether you're in a meeting, on site, or asleep.</li>
+      <li><strong>Email</strong> — Handles your inbox end to end. Drafts replies, organises messages by priority, follows up on unanswered threads, and manages the back-and-forth that eats your mornings. Works with Gmail and any standard email setup.</li>
+      <li><strong>Telegram</strong> — Runs full channels with buttons, polls, media, and automated message flows. Ideal for membership communities, internal teams, or client groups.</li>
+      <li><strong>iMessage &amp; SMS</strong> — Reads and responds to text messages. No channel left unattended.</li>
+      <li><strong>Multi-channel at once</strong> — A prospect WhatsApps you, emails your office, and messages on Telegram? OSCortex sees it all, keeps the context joined up, and responds appropriately on each channel. No crossed wires. No dropped threads.</li>
+    </ul>
+  </div>
+
+  <!-- Research -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon">🔍</div>
+      <h3>Research &amp; Intelligence — Know Before You Go</h3>
+    </div>
+    <p>OSCortex does your homework before you've had your coffee.</p>
+    <ul>
+      <li><strong>Prospect research</strong> — Before a call, OSCortex pulls together everything public about the company and the person you're meeting: company size, recent news, decision-maker background, social media activity. You walk in prepared.</li>
+      <li><strong>Competitor intelligence</strong> — Full public-information profiles on any competitor. What they're saying, what they're charging, where they're showing up, what their customers are saying about them.</li>
+      <li><strong>Live web search</strong> — Current events, market data, news, pricing — searched and summarised in seconds.</li>
+      <li><strong>Social media monitoring</strong> — Tracks topics, trends, and mentions on X/Twitter in real time.</li>
+      <li><strong>Blog and news monitoring</strong> — Watches any website, blog, or news source you care about.</li>
+      <li><strong>Video and podcast summaries</strong> — Point it at a YouTube video or podcast episode. It watches, reads the transcript, and delivers a structured brief. A 90-minute interview becomes a two-minute read.</li>
+      <li><strong>Document analysis</strong> — Hand it a PDF, article, or report. It reads the whole thing and gives you a structured breakdown in seconds.</li>
+    </ul>
+  </div>
+
+  <!-- Content -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon">✍️</div>
+      <h3>Content &amp; Copy — Created, Not Templated</h3>
+    </div>
+    <p>OSCortex writes original content matched to your business, your voice, and your audience.</p>
+    <ul>
+      <li><strong>Sales emails and sequences</strong> — First-touch emails, follow-up sequences, objection-handling variations, re-engagement campaigns.</li>
+      <li><strong>Landing pages and ad copy</strong> — Long form, short form, matched to the audience you're targeting.</li>
+      <li><strong>Social media content</strong> — LinkedIn posts, X threads, platform-native formats that don't sound like they came from a robot.</li>
+      <li><strong>Proposals and quotes</strong> — Structured, professional proposals using your pricing framework and the prospect's specific situation.</li>
+      <li><strong>Scripts</strong> — Video scripts, phone scripts, discovery call guides. Word-for-word material your team can use today.</li>
+      <li><strong>Visual content</strong> — AI-generated marketing images, social graphics, concept visuals, diagrams, flowcharts, promotional video clips, and audio jingles.</li>
+    </ul>
+  </div>
+
+  <!-- Operations -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon">⚙️</div>
+      <h3>Operations — The Admin You Hate, Done</h3>
+    </div>
+    <ul>
+      <li><strong>Task and project tracking</strong> — What's open, what's overdue, what's coming up. Nothing falls through the cracks.</li>
+      <li><strong>Morning briefings</strong> — Every day before you start, a clean summary: today's priorities, overdue items, upcoming deadlines. Three to five bullet points. Read it with your coffee.</li>
+      <li><strong>Lead management</strong> — Every prospect captured, profiled, and tracked with full context.</li>
+      <li><strong>Pipeline management</strong> — Where every deal sits, what happened last, what needs to happen next.</li>
+      <li><strong>Meeting prep</strong> — Before any call or meeting, OSCortex generates a brief: who you're meeting, their background, your history, what to raise.</li>
+      <li><strong>Follow-up automation</strong> — Scheduled messages and check-ins that go out automatically.</li>
+    </ul>
+  </div>
+
+  <!-- Automation -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon">🤖</div>
+      <h3>Automation — Set It, Trust It</h3>
+    </div>
+    <ul>
+      <li><strong>Scheduled tasks</strong> — Daily, weekly, or custom-timed work that runs without you touching anything.</li>
+      <li><strong>Multi-step sequences</strong> — Trigger happens → OSCortex takes action → checks the response → takes the next action → logs it.</li>
+      <li><strong>Background processing</strong> — Give it a complex job at 5pm. Results are waiting when you log on at 8am.</li>
+      <li><strong>Parallel work</strong> — Multiple AI agents working on different parts of a project simultaneously.</li>
+      <li><strong>Browser automation</strong> — Fills forms, extracts data from websites, monitors pages for changes.</li>
+    </ul>
+  </div>
+
+  <!-- Data -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon">📊</div>
+      <h3>Data &amp; Analysis — Numbers Into Answers</h3>
+    </div>
+    <ul>
+      <li><strong>Spreadsheet analysis</strong> — Drop in a CSV or spreadsheet. OSCortex reads it and tells you what matters: trends, outliers, patterns, recommendations.</li>
+      <li><strong>Financial tracking</strong> — Revenue trends, cost patterns, margin analysis.</li>
+      <li><strong>Performance reporting</strong> — Raw numbers turned into clear reports with actual insight, not just charts.</li>
+      <li><strong>Custom calculations</strong> — Complex modelling, forecasting, scenario analysis. It runs real code to get real answers.</li>
+    </ul>
+  </div>
+
+  <!-- Integrations -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon">🔌</div>
+      <h3>Integrations — Plugs Into What You Already Use</h3>
+    </div>
+    <div class="card-grid">
+      <div class="card"><h3>Google Workspace</h3><p>Gmail, Calendar, Drive, Contacts, Sheets, Docs. Full read and write access.</p></div>
+      <div class="card"><h3>Notion</h3><p>Reads, writes, and manages databases and pages.</p></div>
+      <div class="card"><h3>GoHighLevel</h3><p>CRM data, pipeline management, contact records.</p></div>
+      <div class="card"><h3>Stripe</h3><p>Payment and subscription context.</p></div>
+      <div class="card"><h3>Apple Ecosystem</h3><p>Notes, Reminders, Messages.</p></div>
+      <div class="card"><h3>GitHub</h3><p>Code repositories, issues, pull requests (for technical clients).</p></div>
+      <div class="card"><h3>Obsidian</h3><p>Full knowledge base management.</p></div>
+      <div class="card"><h3>1Password</h3><p>Secure credential management.</p></div>
+    </div>
+    <p style="margin-top:14px;font-size:13px;"><em>And the list grows. New integrations are added regularly based on what clients need.</em></p>
+  </div>
+
+  <!-- Memory -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon">🧠</div>
+      <h3>Memory &amp; Learning — The Part That Changes Everything</h3>
+    </div>
+    <div class="highlight-box">
+      <div class="highlight-box-label">Key Differentiator</div>
+      <p>This is where OSCortex stops being software and starts being an asset.</p>
+    </div>
+    <ul>
+      <li><strong>Persistent memory</strong> — Nothing is forgotten between conversations. What you discussed on Tuesday is still known on Friday.</li>
+      <li><strong>Structured knowledge base</strong> — Client profiles, business facts, preferences, history, procedures, pricing rules, staff information — all stored, indexed, and accessible instantly.</li>
+      <li><strong>Semantic search</strong> — It finds relevant context from months ago without you asking for it.</li>
+      <li><strong>Full session logging</strong> — Every interaction is recorded, indexed, and searchable. Your institutional knowledge is preserved permanently.</li>
+      <li><strong>Compounding intelligence</strong> — Every month it runs, it knows more. It gets better at your specific tasks, your specific clients, your specific market. It's not a static tool. It's a growing team member.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── PART 3 ─────────────────────────────────────────────────────── -->
+<section id="part3">
+  <div class="section-header">
+    <span class="section-num">Part 3</span>
+    <h2>The Value Chain</h2>
+  </div>
+  <p><em>This is where deals are won. Features don't close sales. Benefits of benefits do. The chain runs: Feature → Benefit → Benefit of the Benefit (the emotional payoff the buyer actually feels).</em></p>
+
+  <h3>💬 Communications</h3>
+  <div class="table-wrap">
+    <table class="vc-table">
+      <thead><tr><th>Feature</th><th>Benefit</th><th>Benefit of the Benefit</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Handles WhatsApp, email, Telegram, SMS simultaneously</td>
+          <td>Your prospects get fast, accurate replies on every channel, even when you're unavailable</td>
+          <td><strong>You never lose a deal because you were too slow to respond.</strong> That enquiry at 9pm on a Thursday? Handled. The follow-up you forgot about? Sent. You stop living in fear of your notification bar.</td>
+        </tr>
+        <tr>
+          <td>Responds in your voice and tone</td>
+          <td>Messages don't sound robotic or generic — they sound like you wrote them</td>
+          <td><strong>Your reputation stays intact.</strong> Clients feel personally attended to. They refer you because the experience felt premium, even when you weren't the one typing.</td>
+        </tr>
+        <tr>
+          <td>Routes urgent messages to you, handles routine ones itself</td>
+          <td>You only see the messages that actually need you</td>
+          <td><strong>You get your focus back.</strong> No more scanning 40 messages to find the 3 that matter. Your mornings belong to you again.</td>
+        </tr>
+        <tr>
+          <td>Sends scheduled follow-ups automatically</td>
+          <td>No prospect goes cold because someone forgot to reply</td>
+          <td><strong>Your pipeline stops leaking.</strong> The revenue you're already losing to slow follow-up starts coming back. This alone typically covers the monthly cost within the first 60 days.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>🔍 Research &amp; Intelligence</h3>
+  <div class="table-wrap">
+    <table class="vc-table">
+      <thead><tr><th>Feature</th><th>Benefit</th><th>Benefit of the Benefit</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Generates prospect research briefs before calls</td>
+          <td>You walk into every conversation knowing who you're talking to, what they care about</td>
+          <td><strong>You sound like you've done your homework — because you have.</strong> Trust is built in the first two minutes. You're not the salesperson fumbling with notes.</td>
+        </tr>
+        <tr>
+          <td>Monitors competitors in real time</td>
+          <td>You know what they're doing before your market does</td>
+          <td><strong>You stop being surprised.</strong> A competitor drops their prices? You know about it the same day. You respond from a position of knowledge, not panic.</td>
+        </tr>
+        <tr>
+          <td>Summarises videos, podcasts, and long documents</td>
+          <td>Hours of content become two-minute reads</td>
+          <td><strong>You stay informed without sacrificing your calendar.</strong> That industry podcast you never have time for? You get the key points in your morning briefing.</td>
+        </tr>
+        <tr>
+          <td>Tracks social media trends and mentions</td>
+          <td>You know what your market is talking about right now</td>
+          <td><strong>You're part of the conversation when it matters.</strong> Not three days late. Not reacting to last week's news.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>✍️ Content &amp; Copy</h3>
+  <div class="table-wrap">
+    <table class="vc-table">
+      <thead><tr><th>Feature</th><th>Benefit</th><th>Benefit of the Benefit</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Writes sales emails, ad copy, social posts, and proposals in your voice</td>
+          <td>Content production goes from days to minutes — and it's on-brand every time</td>
+          <td><strong>You become prolific.</strong> Your competitors post once a week. You post every day. Volume wins markets, and you now have volume without headcount.</td>
+        </tr>
+        <tr>
+          <td>Creates original visual content — images, graphics, video clips</td>
+          <td>You don't need a designer for every social post or presentation</td>
+          <td><strong>You look bigger than you are.</strong> Professional visuals, fast turnaround. Your marketing looks like a company ten times your size.</td>
+        </tr>
+        <tr>
+          <td>Generates proposals and quotes from prospect context</td>
+          <td>Proposals go out the same day, not next week</td>
+          <td><strong>You close faster.</strong> The prospect is excited NOW. Not in four days when you finally get the proposal together and they've already talked to someone else.</td>
+        </tr>
+        <tr>
+          <td>Builds scripts for calls, videos, and discovery sessions</td>
+          <td>Your team has word-for-word material they can use today</td>
+          <td><strong>Your sales quality stops depending on who's having a good day.</strong> The newest person delivers the same quality as your best closer.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>⚙️ Operations &amp; Automation</h3>
+  <div class="table-wrap">
+    <table class="vc-table">
+      <thead><tr><th>Feature</th><th>Benefit</th><th>Benefit of the Benefit</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Delivers a morning briefing every day before work starts</td>
+          <td>You know exactly what needs your attention before you open your laptop</td>
+          <td><strong>You start the day in control.</strong> Not reactive. Not overwhelmed. Five bullets. Read. Decide. Move.</td>
+        </tr>
+        <tr>
+          <td>Tracks every lead with full context and next steps</td>
+          <td>Nothing falls through the cracks — every prospect is accounted for</td>
+          <td><strong>You stop losing money to forgetfulness.</strong> That hotel group who enquired three weeks ago didn't go quiet because they weren't interested. They went quiet because nobody followed up.</td>
+        </tr>
+        <tr>
+          <td>Runs multi-step automated sequences overnight</td>
+          <td>Complex work happens while you sleep</td>
+          <td><strong>You wake up to results, not a to-do list.</strong> Leads scored. Reports compiled. Follow-ups sent. The business moved forward eight hours while you were resting.</td>
+        </tr>
+        <tr>
+          <td>Manages pipeline with deal status and follow-up timing</td>
+          <td>You always know where every deal sits and what needs to happen next</td>
+          <td><strong>You sell with clarity.</strong> No more gut feel. No more "I think they're close." Your close rate goes up because your process tightened.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>🧠 Memory &amp; Compounding Intelligence</h3>
+  <div class="table-wrap">
+    <table class="vc-table">
+      <thead><tr><th>Feature</th><th>Benefit</th><th>Benefit of the Benefit</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Remembers every conversation, decision, and preference</td>
+          <td>You never have to repeat yourself or re-explain your business</td>
+          <td><strong>It feels like working with someone who actually knows you.</strong> A system that already knows your pricing, your clients, your preferences, your history.</td>
+        </tr>
+        <tr>
+          <td>Builds a structured knowledge base specific to your business</td>
+          <td>Your institutional knowledge is captured, preserved, and accessible permanently</td>
+          <td><strong>Your business knowledge survives people leaving.</strong> When a key staff member walks out, they take everything they know with them. With OSCortex, the knowledge stays.</td>
+        </tr>
+        <tr>
+          <td>Gets measurably better the longer it runs</td>
+          <td>Month 1 is good. Month 6 is exceptional. Month 12 is indispensable.</td>
+          <td><strong>You're building an asset, not paying a subscription.</strong> Every month, OSCortex knows more about your business. That accumulated intelligence has real value.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── PART 4 ─────────────────────────────────────────────────────── -->
+<section id="part4">
+  <div class="section-header">
+    <span class="section-num">Part 4</span>
+    <h2>Positioning by Client Type</h2>
+  </div>
+  <p>Select the client type before every first call.</p>
+
+  <div class="client-tabs">
+    <div class="tab-nav" id="tabNav">
+      <button class="tab-btn active" data-tab="hotels">🏨 Hotels</button>
+      <button class="tab-btn" data-tab="workwear">🦺 Workwear</button>
+      <button class="tab-btn" data-tab="coaches">🎯 Coaches</button>
+      <button class="tab-btn" data-tab="solo">👤 Solo Ops</button>
+      <button class="tab-btn" data-tab="agencies">🏢 Agencies</button>
+    </div>
+
+    <div class="tab-content">
+      <!-- Hotels -->
+      <div class="tab-panel active" id="tab-hotels">
+        <p style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:16px;">📌 Ben — this is your territory. Use this framing.</p>
+        <div class="highlight-box">
+          <div class="highlight-box-label">Opening Line</div>
+          <p>"You run a hotel. That means you're managing bookings, staff, guest communications, marketing, suppliers, and reviews — all at the same time, every single day. What if you had a team that handled the communications, the follow-ups, the content, and the research — and it ran 24 hours a day, including the night shift?"</p>
+        </div>
+        <h4>Key Angles</h4>
+        <ul>
+          <li><strong>Guest enquiry response time</strong> — "A guest enquires at 11pm about availability for a group booking next month. Right now, they wait until morning. With OSCortex, they get a warm, informed reply within minutes. That booking is confirmed before your competitor's receptionist clocks in."</li>
+          <li><strong>Review management and reputation</strong> — "OSCortex monitors what's being said about your property. Negative review appears? You know within the hour."</li>
+          <li><strong>Seasonal content production</strong> — "Christmas packages, summer promotions, wedding season — OSCortex creates the email campaigns, social content, and landing page copy for every season, tailored to your property."</li>
+          <li><strong>Staff knowledge retention</strong> — "Your duty manager leaves. How much guest history walks out the door with them? With OSCortex, none."</li>
+          <li><strong>Multi-property scale</strong> — "Running two or three properties? OSCortex handles them all. Same consistency. Same response quality."</li>
+        </ul>
+        <h4>Objection: "We already have a booking system."</h4>
+        <blockquote><p>"OSCortex doesn't replace your PMS. It handles everything your PMS doesn't — the communications, the marketing, the follow-ups, the research, the content. It's the operational layer that sits around your existing systems."</p></blockquote>
+      </div>
+
+      <!-- Workwear -->
+      <div class="tab-panel" id="tab-workwear">
+        <p style="font-size:12px;color:var(--accent);font-weight:700;margin-bottom:16px;">📌 Ady — this is your ground. Your contacts know these problems.</p>
+        <div class="highlight-box">
+          <div class="highlight-box-label">Opening Line</div>
+          <p>"You've been in workwear for twenty years. You know the margins are tight, the competition is fierce, and the businesses that win are the ones that follow up fastest, know their customers best, and never let a quote go cold. What if you had a system that did all three, automatically?"</p>
+        </div>
+        <h4>Key Angles</h4>
+        <ul>
+          <li><strong>Quote follow-up speed</strong> — "A site manager requests a quote for 200 hi-vis jackets at 2pm. OSCortex has the quote drafted before your competitor has opened the email."</li>
+          <li><strong>Repeat order intelligence</strong> — "Customer ordered flame-resistant coveralls last March? OSCortex knows. Comes time for their annual restock, the follow-up goes out automatically — with their sizes, their preferred brand, their delivery address."</li>
+          <li><strong>Catalogue and product knowledge</strong> — "Ask it about the difference between two fabric types, the compliance rating of a particular boot, the lead time on embroidered polos — it knows, because it's been taught your catalogue."</li>
+          <li><strong>Trade show and event preparation</strong> — "OSCortex researches every exhibitor and attendee company in advance. You walk the floor knowing who to talk to."</li>
+          <li><strong>Tender and RFP support</strong> — "Public sector tender lands on your desk at 4pm Friday. Monday morning, you're reviewing a draft — not staring at a blank page."</li>
+        </ul>
+        <blockquote><p>These are practical people. Don't lead with technology. Lead with time and money. "How many quotes went cold last month because nobody chased them? OSCortex chases every one. Automatically."</p></blockquote>
+      </div>
+
+      <!-- Coaches -->
+      <div class="tab-panel" id="tab-coaches">
+        <div class="highlight-box">
+          <div class="highlight-box-label">Opening Line</div>
+          <p>"You sell your expertise. But you spend half your time on things that aren't your expertise — admin, follow-ups, content, scheduling, proposal writing. What if you had a system that handled all of that, learned your methodology, and let you focus on the work that actually earns?"</p>
+        </div>
+        <h4>Key Angles</h4>
+        <ul>
+          <li><strong>Content machine</strong> — "OSCortex creates content in your voice, from your ideas, on your schedule. You review and post. The thinking is yours. The production is handled."</li>
+          <li><strong>Client onboarding and communication</strong> — "New client signs up. OSCortex sends the welcome sequence, books the discovery call, prepares your brief, and logs their goals. They feel premium from day one."</li>
+          <li><strong>Intellectual property preservation</strong> — "Every framework you've ever created, every process you've refined — OSCortex stores it, indexes it, and makes it searchable. Your methodology becomes a living, growing knowledge base."</li>
+          <li><strong>Scaling without cloning yourself</strong> — "With OSCortex, the system handles the operational weight. You take on more clients without drowning in more admin."</li>
+        </ul>
+      </div>
+
+      <!-- Solo -->
+      <div class="tab-panel" id="tab-solo">
+        <div class="highlight-box">
+          <div class="highlight-box-label">Opening Line</div>
+          <p>"You're doing everything. Sales, marketing, delivery, invoicing, follow-ups, emails, content — all of it, on your own. You don't need a lecture about working harder. You need someone to take half the list off your plate. That's what OSCortex does."</p>
+        </div>
+        <h4>Key Angles</h4>
+        <ul>
+          <li><strong>You're not alone any more</strong> — "OSCortex is your virtual team. It handles the things you're too busy to do and too important to skip."</li>
+          <li><strong>Affordable alternative to hiring</strong> — "Hiring an assistant costs £25,000 minimum. They work 37 hours a week, need training, take holidays, and might leave. OSCortex costs a fraction of that, works 24/7, never forgets anything, and gets better every month."</li>
+          <li><strong>Professional image</strong> — "Your prospects don't know you're a one-person operation. Responses come fast. Content is consistent. Proposals look polished. You look like a team because you have one."</li>
+        </ul>
+      </div>
+
+      <!-- Agencies -->
+      <div class="tab-panel" id="tab-agencies">
+        <div class="highlight-box">
+          <div class="highlight-box-label">Opening Line</div>
+          <p>"You've got a model that works. The question is whether you can deliver it at scale without the delivery quality falling off a cliff. OSCortex gives you a repeatable, consistent operational backbone that runs the same way for client number 50 as it did for client number 5."</p>
+        </div>
+        <h4>Key Angles</h4>
+        <ul>
+          <li><strong>Repeatable delivery</strong> — "Every client gets the same quality of onboarding, the same speed of communication, the same thoroughness of research and reporting."</li>
+          <li><strong>Per-client knowledge isolation</strong> — "Each client's context is separate. OSCortex knows Client A's market, competitors, and history — and it doesn't confuse that with Client B's."</li>
+          <li><strong>Margin expansion</strong> — "OSCortex handles the operational work — the research, the content production, the admin — and your team focuses on strategy and client relationships. Same revenue. Lower delivery cost. Better margins."</li>
+          <li><strong>White-label potential</strong> — "Imagine offering 'always-on AI operations' as part of your agency's service tier. Not as a bolt-on. As a core differentiator that no competitor without OSCortex can match."</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PART 5 ─────────────────────────────────────────────────────── -->
+<section id="part5">
+  <div class="section-header">
+    <span class="section-num">Part 5</span>
+    <h2>The Compounding Value Story</h2>
+  </div>
+  <p><em>Designed to be delivered as a narrative — in a meeting, on a call, or in a follow-up email. Learn it. Own it.</em></p>
+
+  <div class="highlight-box">
+    <div class="highlight-box-label">The Flywheel</div>
+    <p>Most business tools are flat. You pay for them in January, and in December they do exactly the same thing. Same features. Same limitations. Same value. OSCortex is different. It compounds.</p>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-marker"><div class="timeline-label">Month 1</div></div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-body"><p>OSCortex is learning your business. Your products, services, pricing, clients, preferences, voice. It's useful immediately — handling communications, creating content, running research — but it's still new. You're teaching it.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-marker"><div class="timeline-label">Month 3</div></div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-body"><p>It knows your top clients by name. It knows your pricing tiers without asking. It remembers that you prefer proposals formatted a certain way. It recalls that a particular customer always pays late and adjusts the follow-up tone accordingly. It's not just doing tasks — it's doing them the way you would.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-marker"><div class="timeline-label">Month 6</div></div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-body"><p>It knows your business. Not in a general sense. <em>Specifically.</em> It knows your seasonal patterns, your common objections, your best-performing content, your biggest competitors. You stop giving it context. It already has the context.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-marker"><div class="timeline-label">Month 12</div></div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-body"><p>It knows your business better than most of your staff. Your average employee remembers what happened last week. OSCortex has a perfect record of every conversation, every decision, every client interaction since day one — and it can recall any of it in seconds.</p></div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-marker"><div class="timeline-label">Month 24</div></div>
+      <div class="timeline-dot"></div>
+      <div class="timeline-body"><p>It's irreplaceable. Switching to something else doesn't just mean changing tools. It means losing all of that accumulated intelligence. Starting from zero.</p></div>
+    </div>
+  </div>
+
+  <h3>What This Means for the Client</h3>
+  <blockquote><p>"Every month you run OSCortex, it becomes more valuable. Not because we add features — because it adds knowledge. YOUR knowledge. About YOUR business. The system you have at twelve months is worth dramatically more than the system you had at three months."</p></blockquote>
+  <blockquote><p>"That's why we don't call it a subscription. It's an investment. The value doesn't stay flat — it grows. And after a year, the cost of NOT running it is far higher than the cost of running it, because walking away means losing everything it's learned."</p></blockquote>
+
+  <h3>The Contrast</h3>
+  <blockquote><p>"ChatGPT forgets you every time you close the window. It doesn't know your business. It doesn't know your clients. It doesn't know your preferences. Every single session starts from zero. OSCortex never starts from zero. It starts from everything it's ever learned about you."</p></blockquote>
+
+  <h3>Why This Wins Deals</h3>
+  <div class="card-grid">
+    <div class="card">
+      <h3>📈 Increasing Value</h3>
+      <p>The client gets more from OSCortex every month. Their satisfaction goes up, not down.</p>
+    </div>
+    <div class="card">
+      <h3>🔒 Increasing Switching Cost</h3>
+      <p>Walking away gets harder the longer they stay — not because of a contract, but because of accumulated value.</p>
+    </div>
+    <div class="card">
+      <h3>🔄 Natural Retention</h3>
+      <p>They don't stay because they're locked in. They stay because leaving would be irrational. The system knows too much.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── PART 6 ─────────────────────────────────────────────────────── -->
+<section id="part6">
+  <div class="section-header">
+    <span class="section-num">Part 6</span>
+    <h2>Words That Work</h2>
+  </div>
+  <p>Use these phrases deliberately and consistently.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Word / Phrase</th><th>Why It Works</th></tr></thead>
+      <tbody>
+        <tr><td>"Your virtual workforce"</td><td>Positions OSCortex as a team, not a tool. People understand "workforce." It implies real work getting done.</td></tr>
+        <tr><td>"Works while you sleep"</td><td>Concrete. Visceral. Every business owner has lain awake thinking about what's not getting done.</td></tr>
+        <tr><td>"The system runs it — you review it"</td><td>Flips the owner from operator to decision-maker. That's what they want. They want to review, not execute.</td></tr>
+        <tr><td>"Built around how YOUR business actually works"</td><td>Emphasises personalisation. Not a one-size-fits-all product. Theirs. Configured for them. Learning from them.</td></tr>
+        <tr><td>"Like having a team without the overhead"</td><td>Solves the hiring problem without the hiring risk. No HR, no sick days, no notice periods, no training curve.</td></tr>
+        <tr><td>"Gets smarter the longer it runs"</td><td>The compounding pitch in seven words. Simple enough to repeat. Intriguing enough to prompt "what do you mean?"</td></tr>
+        <tr><td>"Permanent deployment"</td><td>Implies durability. It's not a trial, not a subscription, not software. It's deployed. It's there. It's running.</td></tr>
+        <tr><td>"Your deployment"</td><td>Possessive framing. It's THEIRS. Not a shared service. Not a platform. Their own workforce.</td></tr>
+        <tr><td>"Getting you live on OSCortex"</td><td>Action-oriented. Implies momentum. "Getting you live" suggests something real happening.</td></tr>
+        <tr><td>"Handles it"</td><td>Two words. Use liberally. "Who follows up on old leads?" — "OSCortex handles it." Repetition builds the picture.</td></tr>
+        <tr><td>"It remembers"</td><td>Simple, human, powerful. The prospect immediately contrasts it with every tool that doesn't.</td></tr>
+        <tr><td>"You never have to explain that twice"</td><td>Demonstrates the memory benefit through a moment they've experienced. Everyone has had to re-explain something.</td></tr>
+        <tr><td>"Your business intelligence compounds"</td><td>Financial language. "Compounds" implies growth, investment return. Reframes cost as investment.</td></tr>
+        <tr><td>"Always on"</td><td>No downtime. No office hours. No holidays. Communicates permanence and reliability.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── PART 7 ─────────────────────────────────────────────────────── -->
+<section id="part7">
+  <div class="section-header">
+    <span class="section-num">Part 7</span>
+    <h2>Words to Kill</h2>
+  </div>
+  <p>These are banned. Every one of them costs you credibility.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Word / Phrase</th><th>Why It's Banned</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--danger);">"Revolutionary"</td><td>Empty hype. Everyone claims it. Nobody believes it. Makes you sound like every other AI pitch.</td></tr>
+        <tr><td style="color:var(--danger);">"Game-changing"</td><td>Overused to the point of meaninglessness. Same problem.</td></tr>
+        <tr><td style="color:var(--danger);">"AI-powered" (standalone)</td><td>Vague. Everything claims to be "AI-powered" now. Always say what it does, specifically.</td></tr>
+        <tr><td style="color:var(--danger);">"Cutting-edge"</td><td>Triggers scepticism. Sounds like you're selling technology, not results. They want things done.</td></tr>
+        <tr><td style="color:var(--danger);">"Seamlessly"</td><td>Nobody believes this word. It sounds like marketing copy. Drop it.</td></tr>
+        <tr><td style="color:var(--danger);">"Synergy"</td><td>Corporate jargon. Instant credibility loss with the SME owners you're selling to.</td></tr>
+        <tr><td style="color:var(--danger);">"Leverage" (as a verb)</td><td>Boardroom language that makes real people's eyes glaze over.</td></tr>
+        <tr><td style="color:var(--danger);">"Bot" / "Chatbot"</td><td>Immediately makes people think of those terrible website chat widgets. Kill this word on sight.</td></tr>
+        <tr><td style="color:var(--danger);">"Automate your business"</td><td>Scares people. It sounds like you're removing them from their own company.</td></tr>
+        <tr><td style="color:var(--danger);">"Disrupt"</td><td>Silicon Valley language. Your prospects in Sheffield and Birmingham don't care about disruption.</td></tr>
+        <tr><td style="color:var(--danger);">"Set and forget"</td><td>Implies no oversight. Say "the system runs it — you review it" instead.</td></tr>
+        <tr><td style="color:var(--danger);">"Platform"</td><td>Vague SaaS word. OSCortex isn't a platform they log into. It's a deployment inside their business.</td></tr>
+        <tr><td style="color:var(--danger);">"Solution"</td><td>The most overused word in B2B. Replace with what it actually does.</td></tr>
+        <tr><td style="color:var(--danger);">"Onboarding" (with clients)</td><td>Use "getting you live" or "getting you set up." Onboarding sounds like SaaS. This is deployment.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── PART 8 ─────────────────────────────────────────────────────── -->
+<section id="part8">
+  <div class="section-header">
+    <span class="section-num">Part 8</span>
+    <h2>Field Scripts</h2>
+  </div>
+  <p><em>Word-for-word answers. Practise these until they're natural. Click any card to expand.</em></p>
+
+  <div class="accordion" id="accordion">
+
+    <!-- Script 1 -->
+    <div class="acc-item open">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <span class="acc-q">What is it, exactly?</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <blockquote><p>"OSCortex is your virtual workforce. It's an AI operating system that gets deployed into your business permanently. It handles your day-to-day operational work — answering messages across WhatsApp and email, writing proposals, researching prospects, managing your pipeline, creating content, chasing follow-ups — and it runs around the clock.<br><br>But the part that makes it different from anything else on the market is this: it learns your business. Every week it runs, it knows more about your clients, your products, your preferences, your market. At six months it knows your business intimately. At twelve months it knows it better than most of your staff.<br><br>It's not an app you log into. It's not a chatbot. It's a permanent workforce that lives inside your business and gets smarter every month."</p></blockquote>
+      </div>
+    </div>
+
+    <!-- Script 2 -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <span class="acc-q">How much does it cost?</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <blockquote><p>"There's a one-off setup fee of £5,000 to get you live. That covers the full configuration — your communications, your integrations, your business knowledge loaded, your workflows set up, everything tailored to how your business actually works.<br><br>Then it's £2,000 a month. That covers up to five users.<br><br>To put that in context: a junior hire costs you £25,000 minimum. They work 37 hours a week, need managing, need training, take holidays, and might leave. OSCortex costs less, works 24/7, never forgets anything, never calls in sick, and gets better every single month.<br><br>Most clients find it pays for itself within the first 60 days — usually just from the leads that stopped falling through the cracks."</p></blockquote>
+        <div class="acc-sub-label">If They Push Back on Price</div>
+        <blockquote><p>"I understand. Let me ask you this: how many enquiries came in last month that didn't get followed up within 24 hours? How many quotes went out that nobody chased? What's one of those lost deals worth to you?<br><br>That's the real cost. Not £2,000 a month. It's the revenue you're already losing because there aren't enough hours in the day."</p></blockquote>
+        <div class="acc-sub-label">For Solo Operators</div>
+        <blockquote><p>"For a solo setup, it's £1,997 to get you live and £497 a month. That's less than you'd pay a part-time VA — and this one works around the clock, remembers everything, and handles communications, content, research, and admin all at once."</p></blockquote>
+      </div>
+    </div>
+
+    <!-- Script 3 -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <span class="acc-q">Is it just a chatbot?</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <p class="acc-note">⏸ Pause. Let a small smile show. This is where you separate yourself from every other AI company.</p>
+        <blockquote><p>"That's the most common misconception, and I completely understand why — because the market is flooded with chatbots right now.<br><br>A chatbot sits on your website and gives scripted answers to common questions. That's it. One channel. One function. No memory. No intelligence. No initiative.<br><br>OSCortex is a full operating system. It handles your WhatsApp, your email, your Telegram, your SMS — all at once. It writes your content, researches your prospects, manages your pipeline, prepares your meeting briefs, chases your follow-ups, and generates your reports.<br><br>And — this is the critical part — it remembers everything. A chatbot resets every conversation. OSCortex builds a permanent knowledge base about your business that grows every single day.<br><br>Calling it a chatbot is like calling a car a wheelbarrow because they both have wheels."</p></blockquote>
+      </div>
+    </div>
+
+    <!-- Script 4 -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <span class="acc-q">We already use ChatGPT.</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <blockquote><p>"Good — that tells me you already see the value in AI. That's a head start.<br><br>The difference is this: ChatGPT is a tool you go to. You open it, type something in, get an answer, close it. It doesn't know your business. It doesn't remember last week's conversation. It can't send your emails, manage your pipeline, or follow up with your leads. Every single time you use it, you start from zero.<br><br>OSCortex is a permanent workforce that lives inside your business. It already knows your clients, your products, your pricing, your preferences. It doesn't wait for you to ask — it runs your communications, does your research, creates your content, and manages your operations around the clock.<br><br>Using ChatGPT for your business is like Googling a question and calling yourself a research department. It's useful, but it's not the same thing.<br><br>The businesses that are going to win in the next two years aren't the ones using AI as a tool. They're the ones that have AI running inside their operations permanently. That's what OSCortex is."</p></blockquote>
+      </div>
+    </div>
+
+    <!-- Script 5 -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <span class="acc-q">We'll think about it.</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <blockquote><p>"Of course. Take the time you need — this is an important decision.<br><br>But here's what I'd ask you to think about while you're thinking: every week that passes, your competitors are either building this capability or they're not. The businesses that deploy this year will have six months of compounded intelligence by the time their competitors even start.<br><br>That gap isn't just time. It's knowledge. It's client relationships that have been nurtured automatically. It's content that's been published. It's leads that have been followed up on within minutes instead of days.<br><br>I'm not asking you to rush. I'm asking you to consider what it costs to wait.<br><br>What would be useful — shall I put together a specific brief showing exactly how this would work in your business? No obligation. Just so you can see what 'live on OSCortex' actually looks like for you specifically."</p></blockquote>
+        <p class="acc-note">Always offer to make it concrete. "We'll think about it" usually means "I can't picture it yet." Give them the picture.</p>
+      </div>
+    </div>
+
+    <!-- Script 6 -->
+    <div class="acc-item">
+      <button class="acc-trigger" onclick="toggleAcc(this)">
+        <span class="acc-q">How is this different from hiring someone?</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-body">
+        <blockquote><p>"Three ways.<br><br><strong>First: availability.</strong> A person works 37 hours a week, takes holidays, gets sick, has bad days. OSCortex works 168 hours a week. Every week. Without exception.<br><br><strong>Second: memory.</strong> A person forgets things. They lose context. They leave and take everything they know with them. OSCortex remembers every conversation, every decision, every client preference, permanently. Your business knowledge stays — it doesn't walk out the door.<br><br><strong>Third: compounding.</strong> A new hire starts productive and stays roughly the same. OSCortex genuinely gets better — measurably more capable, more informed, more useful — the longer it runs. At twelve months it's a fundamentally more valuable asset than it was at three months.<br><br>And the cost comparison: a decent hire is £30,000 to £45,000 a year all in. Training, management, office space, equipment, pension, NI. OSCortex costs £24,000 a year and does the work of multiple roles simultaneously.<br><br>I'm not saying never hire. I'm saying hire for the work that needs a human — relationships, strategy, judgment. Let OSCortex handle the operational weight."</p></blockquote>
+      </div>
+    </div>
+
+  </div><!-- /accordion -->
+</section>
+
+<!-- ── PART 9 ─────────────────────────────────────────────────────── -->
+<section id="part9">
+  <div class="section-header">
+    <span class="section-num">Part 9</span>
+    <h2>The Closing Principle</h2>
+  </div>
+  <p>Every conversation about OSCortex should leave the prospect with one idea. Not a feature. Not a price. One idea that sits in their mind after you've left the room.</p>
+
+  <div class="closing-idea">
+    <p>"The businesses that deploy AI into their operations this year will have an intelligence advantage that their competitors cannot catch up to — because the value compounds over time."</p>
+  </div>
+
+  <h3>Why It Works</h3>
+  <div class="card-grid">
+    <div class="card">
+      <h3>✅ It's True</h3>
+      <p>Compounding intelligence is real. The system genuinely gets more valuable the longer it runs. You're not exaggerating.</p>
+    </div>
+    <div class="card">
+      <h3>⏰ It's Urgent</h3>
+      <p>There is a real first-mover advantage. The business that starts now will have 12 months of accumulated intelligence when their competitor starts from zero next year.</p>
+    </div>
+    <div class="card">
+      <h3>🎯 It's Specific</h3>
+      <p>It's not "AI is the future." It's "the intelligence compounds." A concrete, memorable claim they can repeat to their partner, their board, their accountant.</p>
+    </div>
+  </div>
+
+  <h3>How to Plant It</h3>
+  <p>Don't save it for the end. Seed it early and come back to it.</p>
+
+  <h4>Early in the conversation:</h4>
+  <blockquote><p>"The thing I want you to understand about OSCortex — beyond what it does day to day — is that the value compounds. It gets smarter about your business every month it runs."</p></blockquote>
+
+  <h4>In the middle, when showing capabilities:</h4>
+  <blockquote><p>"And remember — every one of these interactions adds to the knowledge base. Six months in, it doesn't just do these things. It does them with six months of context about YOUR specific business."</p></blockquote>
+
+  <h4>At the end:</h4>
+  <blockquote><p>"The last thing I'll leave you with is this. The businesses that deploy this year aren't just getting a head start. They're building something their competitors can't replicate — because you can't shortcut twelve months of compounded business intelligence. The only way to get it is to start."</p></blockquote>
+</section>
+
+<!-- ── QUICK REFERENCE ─────────────────────────────────────────────── -->
+<section id="quickref">
+  <div class="section-header">
+    <span class="section-num">Quick Ref</span>
+    <h2>Quick Reference Card</h2>
+  </div>
+  <p>Cut this out. Keep it next to your phone.</p>
+
+  <div id="quick-ref-card">
+    <div class="qr-header">
+      <div class="qr-icon">⚡</div>
+      <div>
+        <div class="qr-title">OSCortex Field Reference</div>
+        <div class="qr-sub">Instant answers for every objection</div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>When They Say…</th><th>You Say…</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>"What is it?"</td>
+            <td>"Your virtual workforce — handles comms, content, research, and ops 24/7, and gets smarter about your business every month."</td>
+          </tr>
+          <tr>
+            <td>"How much?"</td>
+            <td>"£5k setup, £2k/month — less than a junior hire, works 24/7, and improves every month."</td>
+          </tr>
+          <tr>
+            <td>"Sounds like a chatbot."</td>
+            <td>"A chatbot does one thing on one channel with no memory. This runs your entire operation and remembers everything."</td>
+          </tr>
+          <tr>
+            <td>"We use ChatGPT."</td>
+            <td>"ChatGPT is a tool you visit. OSCortex is a workforce that lives in your business permanently."</td>
+          </tr>
+          <tr>
+            <td>"We'll think about it."</td>
+            <td>"Of course. While you do — every week your competitors build this advantage too. Shall I show you what it looks like for your specific business?"</td>
+          </tr>
+          <tr>
+            <td>"Why not just hire someone?"</td>
+            <td>"A hire costs more, works less, forgets things, and doesn't compound. OSCortex does all four better."</td>
+          </tr>
+          <tr>
+            <td>"Is our data safe?"</td>
+            <td>"Your deployment is yours alone. Dedicated system, not shared. Your data stays inside your business."</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ─────────────────────────────────────────────────────── -->
+<section id="pricing">
+  <div class="section-header">
+    <span class="section-num">Pricing</span>
+    <h2>Pricing Reference</h2>
+  </div>
+  <div class="highlight-box" style="margin-bottom:24px;">
+    <div class="highlight-box-label">Golden Rule</div>
+    <p>Never lead with price. Always lead with value, then anchor price against the cost of the problem.</p>
+  </div>
+
+  <div class="pricing-cards">
+    <div class="pricing-card featured">
+      <div class="pricing-tier">Commercial</div>
+      <div class="pricing-setup">Setup: <strong>£5,000</strong> (one-off)</div>
+      <div class="pricing-monthly">£2,000<span>/mo</span></div>
+      <div class="pricing-users">Up to 5 users included</div>
+      <div class="pricing-note">Additional users: £150/user/month</div>
+    </div>
+    <div class="pricing-card">
+      <div class="pricing-tier">Solo Operator</div>
+      <div class="pricing-setup">Setup: <strong>£1,997</strong> (one-off)</div>
+      <div class="pricing-monthly">£497<span>/mo</span></div>
+      <div class="pricing-users">1 user included</div>
+      <div class="pricing-note">Ideal for solo businesses, freelancers, and independent consultants.</div>
+    </div>
+  </div>
+
+  <div class="table-wrap" style="margin-top:20px;">
+    <table>
+      <thead><tr><th>Tier</th><th>Setup</th><th>Monthly</th><th>Users</th><th>Overage</th></tr></thead>
+      <tbody>
+        <tr><td>Commercial</td><td>£5,000</td><td>£2,000</td><td>Up to 5</td><td>£150/user/month</td></tr>
+        <tr><td>Solo Operator</td><td>£1,997</td><td>£497</td><td>1</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+</div><!-- /page -->
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">AI <span>Momentum</span> Labs</div>
+    <div class="footer-tag">aimomentumlabs.com · OSCortex Sales Resource · June 2026</div>
+  </div>
+</footer>
+
+<script>
+  /* ── ACCORDION ── */
+  function toggleAcc(trigger) {
+    const item = trigger.closest('.acc-item');
+    const isOpen = item.classList.contains('open');
+    item.classList.toggle('open', !isOpen);
+  }
+
+  /* ── CLIENT TABS ── */
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + tab).classList.add('active');
+    });
+  });
+
+  /* ── ACTIVE NAV LINK ON SCROLL ── */
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('#navLinks a');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const active = document.querySelector(`#navLinks a[href="#${entry.target.id}"]`);
+        if (active) {
+          active.classList.add('active');
+          active.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
